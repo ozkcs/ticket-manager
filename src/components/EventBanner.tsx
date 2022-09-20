@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import useEvents from '../hooks/useEvents';
 
 const EventBanner = () => {
-  const eventsContex = useEvents();
-  const { currentEvent } = eventsContex;
+  const eventsContext = useEvents();
+  const { currentEvent } = eventsContext;
 
   return (
     <Box as='form' maxW="70%" minW="50%" m="auto" alignItems='center' mb='100'>

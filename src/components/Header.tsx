@@ -5,12 +5,12 @@ import { Logo } from '../Logo';
 import useEvents from '../hooks/useEvents';
 
 const Header = () => {
-  const eventsContex = useEvents();
+  const eventsContext = useEvents();
   const navigate = useNavigate();
 
   return (
     <Flex minWidth='max-content' alignItems='center' gap='2' p="2">
-      <Box as='button' p='2' display='flex' alignItems="center"  onClick={() => {navigate('/'); eventsContex.setCurrentEvent(null)}}>
+      <Box as='button' p='2' display='flex' alignItems="center"  onClick={() => {navigate('/'); eventsContext.setCurrentEvent(null)}}>
         <Logo h="6vmin" mr="5" />
         <Heading  size='md'> Ticket Manager App</Heading>
       </Box>

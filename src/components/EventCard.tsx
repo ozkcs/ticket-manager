@@ -8,10 +8,10 @@ interface props {
 }
 const EventCard = ({ event, index }: props) => {
   const navigate = useNavigate();
-  const eventsContex = useEvents();
+  const eventsContext = useEvents();
 
   const handleOnClick = () => {
-    eventsContex.setCurrentEvent(event);
+    eventsContext.setCurrentEvent(event);
     navigate('generate-code');
   }
   return (
