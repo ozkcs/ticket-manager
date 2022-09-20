@@ -1,34 +1,29 @@
 import { Box, Stack, Text, Button, Flex, Heading, Spacer, useBoolean } from "@chakra-ui/react";
-import FormInput from "./FormInput/FormInput";
+import FormInput from "./FormInput";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-const UserInfoForm = () => {
-
-  const [isDisabled, setIsDisabled] = useBoolean(true);
-
+const CodeGeneratorForm = () => {
   const formik: any = useFormik({
     initialValues: {
       first_name: "",
       last_name: "",
       email: "",
       phone: "",
-      event_name:""
+      event_name: ""
     },
-    validationSchema:Yup.object({
+    validationSchema: Yup.object({
       first_name: Yup.string().required("This field is required"),
       last_name: Yup.string().required("This field is required"),
       email: Yup.string().required("This field is required"),
       phone: Yup.string().required("This field is required"),
-      event_name:Yup.string().required("This field is required"),
+      event_name: Yup.string().required("This field is required"),
     }),
-    onSubmit: (values:any, actions:any) => {
+    onSubmit: (values: any, actions: any) => {
       console.log('it submitted')
       actions.resetForm();
     }
   })
-
-
   return (
     <Box className="code-generator-form">
       <Box as='form' maxW="70%" minW="50%" m="auto" alignItems='center'>
@@ -80,7 +75,6 @@ const UserInfoForm = () => {
             <Text as='sub' fontSize='lg' color='gray.400'>We'll never share your personal information.</Text>
           </Flex>
         </Stack>
-       
         <Flex minWidth='max-content' alignItems='center' justifyContent='center'>
           <Button size='lg' fontWeight='semibold' colorScheme='teal' variant='solid' marginTop={10} type='submit'>Submit</Button>
         </Flex>
@@ -89,4 +83,4 @@ const UserInfoForm = () => {
   )
 };
 
-export default UserInfoForm;
+export default CodeGeneratorForm;

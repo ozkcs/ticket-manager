@@ -1,4 +1,4 @@
-import {useContext} from 'react'
+import { useContext } from 'react'
 import EventsContext from '../context/EventsContext'
 
 const useEvents = () => {
