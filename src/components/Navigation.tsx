@@ -12,10 +12,9 @@ const Navigation = () => {
     eventsContext.fetchEvents();
   }, []);
   return (
-    <Flex minWidth='max-content' alignItems='center' gap='2' justifyContent="center" padding="6" >
+    <Flex minWidth='max-content' alignItems='center' gap='2' justifyContent="space-between" padding="2" direction={['column', 'column', 'row', 'row']} >
       <EventSelector />
-      <Spacer />
-      <Stack direction='row' spacing={4} align='center' marginLeft={10}>
+      <Stack direction='row' spacing={4} align='center'>
         <Button colorScheme='teal' variant='ghost' onClick={() => navigate('generate-code')}>
           Generate QRCode
         </Button>

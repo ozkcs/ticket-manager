@@ -26,12 +26,12 @@ const CodeGeneratorForm = () => {
   })
   return (
     <Box className="code-generator-form">
-      <Box as='form' maxW="70%" minW="50%" m="auto" alignItems='center'>
+      <Box as='form' minWidth='max-content' alignItems='center' gap='2' mt={"50px"}>
         <Stack spacing={4}>
           <Heading size='lg' as='h2' >
             Personal Info
           </Heading >
-          <Stack spacing={4} isInline>
+          <Stack spacing={4} direction={['column', 'column', 'row', 'row']}>
             <FormInput
               name="first_name"
               isRequired
@@ -51,7 +51,7 @@ const CodeGeneratorForm = () => {
               errors={formik.errors.last_name}
             />
           </Stack>
-          <Stack spacing={4} isInline>
+          <Stack spacing={4} direction={['column', 'column', 'row', 'row']}>
             <FormInput
               name="email"
               isRequired
