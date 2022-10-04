@@ -10,6 +10,8 @@ const Navigation = () => {
 
   useEffect(() => {
     eventsContext.fetchEvents();
+    // eventsContext.postNewEvents(); //uncomment if need to post a new event
+    //TODO: Add params to method
   }, []);
   return (
     <Flex minWidth='max-content' alignItems='center' gap='2' justifyContent="space-between" padding="2" direction={['column', 'column', 'row', 'row']} >

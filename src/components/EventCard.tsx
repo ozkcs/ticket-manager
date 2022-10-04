@@ -23,19 +23,30 @@ const EventCard = ({ event, index }: props) => {
           {event?.name}
         </Heading >
         <Stack direction='row' justifyContent={'center'}>
-          <Stack direction='row' spacing={1} flexWrap='nowrap'>
-            <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-              {'End:'} </Text>
-            <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-              {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} </Text>
-          </Stack>
-          <Spacer />
-          <Stack direction='row' spacing={1} flexWrap='nowrap'>
-            <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-              {'End:'} </Text>
-            <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-              {dayjs(event?.dates[1].toDate()).format('DD MMMM YYYY')} </Text>
-          </Stack>
+          {event?.dates[0].leght > 1 ?
+            (<>
+              <Stack direction='row' spacing={1} flexWrap='nowrap'>
+                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
+                  {'Start:'} </Text>
+                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
+                  {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} </Text>
+              </Stack>
+              <Spacer />
+              <Stack direction='row' spacing={1} flexWrap='nowrap'>
+                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
+                  {'End:'} </Text>
+                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
+                  {dayjs(event?.dates[1].toDate()).format('DD MMMM YYYY')} </Text>
+              </Stack>
+            </>)
+            :
+            (<Stack direction='row' spacing={1} flexWrap='nowrap'>
+              <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
+                {'Date:'} </Text>
+              <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
+                {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} </Text>
+            </Stack>)
+          }
         </Stack>
       </Stack>
     </Box>

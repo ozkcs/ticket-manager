@@ -1,52 +1,71 @@
 import {
-  Box, Button, Heading, Radio, RadioGroup, Spacer, Stack, Text, Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
+  Box, Button, Heading, Radio, RadioGroup, Spacer, Stack, Text,
+  Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { titleTextSize, subtitleTextSize, nomralTextSize } from "../utils/ResponsiveStyles";
+import useEvents from '../hooks/useEvents'
+import TicketRowInfo from './TicketRowInfo';
 
 const TicketSelection = () => {
-  const [radioValue, setRadioValue] = useState<any>('1')
+  const eventsContext = useEvents();
+  const [radioValue, setRadioValue] = useState<any>('0')
+  const { aquiredTickets } = eventsContext;
+
+  const handleOnChangeRB = (e: any) => {
+    console.log(e.valueOf())
+    setRadioValue(e.valueOf())
+  }
+  const handleAdd = (value: any) => {
+    let tempTicket: any = {};
+    let tempTicketList = [];
+    const tktExists = eventsContext.aquiredTickets?.find((ticket: any) => ticket.name === value) || false;
+    if (tktExists) {
+      tempTicketList = eventsContext.aquiredTickets?.map((ticket: any) => {//Search the existing ticket to update its value
+        if (ticket.name === value) {
+          tempTicket = { ...ticket, cant: ticket.cant + 1 }
+          return tempTicket;
+        } else {
+          return ticket;
+        }
+      })
+    } else {
+      eventsContext.currentEvent?.ticketTypes?.forEach((ticket: any) => {
+        if (ticket.name === value) {
+          tempTicket = { ...ticket, cant: 1 }
+          delete tempTicket.cantLeft;
+        }
+      })
+      if (eventsContext.aquiredTickets.length !== 0) {
+        tempTicketList = eventsContext.aquiredTickets;
+      }
+      tempTicketList = [...tempTicketList, tempTicket];
+    }
+    eventsContext.setAquiredTickets(tempTicketList);
+  }
   return (
     <>
       <Box minWidth='50%' gap='2' mt={"50px"}>
         <Heading size='lg' as='h2' >
           Ticket Configuration
         </Heading >
-        <RadioGroup colorScheme='teal' size='lg' onChange={setRadioValue} value={radioValue}>
+        <RadioGroup colorScheme='teal' size='lg' onChange={(e) => { handleOnChangeRB(e) }} value={radioValue}>
           <Stack direction={['column', 'column', 'row', 'row']} marginTop={4} gap={[2, 2, 4, 6]} spacing={[2, 2, 4, 6]} >
             <Text fontSize={subtitleTextSize} fontWeight={'bold'}>
-              Available options: </Text>
+              Available options:</Text>
             <Stack direction={'row'} justifyContent={'flex-start'} gap={6} spacing={[4, 4, 4, 6]} >
-              <Radio value='1'>
-                <Text fontSize={nomralTextSize} fontWeight={'bold'}>
-                  STANDARD</Text>
-                <Spacer />
-                <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
-                  24 Left</Text>
-              </Radio>
-              <Radio value='2'>
-                <Text fontSize={nomralTextSize} fontWeight={'bold'}>
-                  VIP</Text>
-                <Spacer />
-                <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
-                  10 Left</Text>
-              </Radio>
-              <Radio value='3'>
-                <Text fontSize={nomralTextSize} fontWeight={'bold'}>
-                  DELUX</Text>
-                <Spacer />
-                <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
-                  5 Left</Text>
-              </Radio>
-              <Button colorScheme={'teal'} >Add</Button>
+              {eventsContext.currentEvent?.ticketTypes?.map((tiket: any, i: number) => {
+                return <>
+                  <Radio value={`${tiket?.name}`}>
+                    <Text fontSize={nomralTextSize} fontWeight={'bold'}>
+                      {tiket?.name}</Text>
+                    <Spacer />
+                    <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
+                      {tiket?.cantLeft !== 0 ? tiket?.cantLeft + ' Left' : 'SoldOut'} </Text>
+                  </Radio>
+                </>
+              })}
+              <Button disabled={radioValue === '0'} colorScheme={'teal'} onClick={() => handleAdd(radioValue)} >Add</Button>
             </Stack>
           </Stack>
         </RadioGroup>
@@ -55,19 +74,14 @@ const TicketSelection = () => {
           <Table variant='simple' fontSize={nomralTextSize}>
             <Thead>
               <Tr>
-                <Th>Ticket Type</Th>
+                <Th>Ticket name</Th>
                 <Th>Price</Th>
                 <Th>Cant</Th>
                 <Th>Total</Th>
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td>info</Td>
-                <Td>info</Td>
-                <Td isNumeric>0</Td>
-                <Td isNumeric>0</Td>
-              </Tr>
+              {aquiredTickets?.map((ticket: any) => { return <TicketRowInfo ticket={ticket} handleAdd={() => handleAdd(ticket.name)} handleSubs={() => handleAdd(ticket.name)} /> })}
             </Tbody>
             <Tfoot>
               <Tr>
@@ -83,11 +97,4 @@ const TicketSelection = () => {
     </>
   )
 }
-// submit, datos mas id del Evento
-// tikettype array{
-//   name
-//   ticketprice
-// }
-// en los radio buttuns ticket available
-// con un imput con la cantidad
 export default TicketSelection
