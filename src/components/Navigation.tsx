@@ -20,7 +20,7 @@ const Navigation = () => {
         <Button colorScheme='teal' variant='ghost' onClick={() => navigate('generate-code')}>
           Generate QRCode
         </Button>
-        <Button colorScheme='teal' variant='ghost' onClick={() => navigate('/')}>
+        <Button colorScheme='teal' variant='ghost' onClick={() => navigate('validate-code')}>
           Validate Code
         </Button>
         <Button colorScheme='teal' variant='ghost' onClick={() => navigate('/')}>
