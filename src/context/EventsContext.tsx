@@ -11,6 +11,7 @@ const EventsProvider = ({ children }: props) => {
   const [currentEvent, setCurrentEvent] = useState<any>();
   const [events, setEvents] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [qrValue, setQrValue] = useState('')
   const { aquiredTickets } = currentEvent || [null];
 
   const setAquiredTickets = (temp: any) => {
@@ -42,6 +43,7 @@ const EventsProvider = ({ children }: props) => {
         currentEvent, setCurrentEvent,
         events, setEvents,
         isLoading, setIsLoading,
+        qrValue, setQrValue,
         aquiredTickets, setAquiredTickets,
         fetchEvents, postNewEvents
       }}>

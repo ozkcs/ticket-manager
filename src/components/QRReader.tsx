@@ -1,34 +1,31 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import React, { useState } from 'react'
 // @ts-ignore
 import QrReader from 'react-qr-scanner';
 import adapter from 'webrtc-adapter';
 const QRReader = () => {
-  const [result, setResult] = useState('');
+const [result, setResult] = useState('');
 
-  // TODO: Change all these tags to chakra tags
   return (
     <Box>
-      
-      {<QrReader
-
-      // @ts-ignore
+      <QrReader
         // legacyMode
-        // delay={500}
-      facingMode='rear'
+        delay={1000}
+        // @ts-ignore
+        // constraints={ {facingMode: 'user'} }
         // containerStyle={{ width: '300px' }}
         onScan={(result: any) => {
+          console.log(result?.text)
           if (!!result) {
             setResult(result?.text);
           }
-    
         }}
-        onError={ (error: any) => {
+        onError={(error: any) => {
           console.log(error)
-            console.log(adapter.browserDetails.browser)
+          console.log(adapter.browserDetails.browser)
         }}
-      />}
-      <h1>{result}</h1>
+      />
+      <Heading>{result}</Heading>
     </Box>
   );
 }

@@ -3,6 +3,7 @@ import CodeGeneratorForm from "../components/CodeGeneratorForm";
 import TicketSelection from "../components/TicketSelection";
 import { Box } from "@chakra-ui/react";
 import useEvents from "../hooks/useEvents";
+import QRGenerator from "../components/QRGenerator";
 
 const GenerateCode = () => {
   const eventsContext = useEvents();
@@ -12,8 +13,13 @@ const GenerateCode = () => {
       <EventBanner />
       {eventsContext.currentEvent &&
         <>
-          <TicketSelection />
-          <CodeGeneratorForm />
+          {eventsContext?.qrValue === '' ?
+            <>
+              <TicketSelection />
+              <CodeGeneratorForm />
+            </>
+            :
+            <QRGenerator />}
         </>
       }
     </Box>)

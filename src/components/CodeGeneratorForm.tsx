@@ -2,31 +2,34 @@ import { Box, Stack, Text, Button, Flex, Heading, Spacer, useBoolean } from "@ch
 import FormInput from "./FormInput";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import useEvents from '../hooks/useEvents';
+import { buyTickets } from '../services/eventsService';
 
 const CodeGeneratorForm = () => {
+  const eventsContext = useEvents();
+  const { currentEvent } = eventsContext;
+
   const formik: any = useFormik({
     initialValues: {
       first_name: "",
       last_name: "",
       email: "",
       phone: "",
-      event_name: ""
     },
     validationSchema: Yup.object({
       first_name: Yup.string().required("This field is required"),
       last_name: Yup.string().required("This field is required"),
       email: Yup.string().required("This field is required"),
       phone: Yup.string().required("This field is required"),
-      event_name: Yup.string().required("This field is required"),
     }),
     onSubmit: (values: any, actions: any) => {
-      console.log('it submitted')
+      eventsContext.setQrValue(buyTickets(values, currentEvent));
       actions.resetForm();
     }
   })
   return (
-    <Box className="code-generator-form">
-      <Box as='form' minWidth='max-content' alignItems='center' gap='2' mt={"50px"}>
+    <Box className="code-generator-form" mb={"50px"}>
+      <Box as='form' minWidth='max-content' alignItems='center' gap='2' mt={"50px"} onSubmit={formik.handleSubmit}>
         <Stack spacing={4}>
           <Heading size='lg' as='h2' >
             Personal Info
