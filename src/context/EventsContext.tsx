@@ -1,5 +1,5 @@
 
-import { createContext, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 import { getEvents, postEvents } from "../services/eventsService";
 
 const EventsContext = createContext<any>(null);
@@ -11,8 +11,11 @@ const EventsProvider = ({ children }: props) => {
   const [currentEvent, setCurrentEvent] = useState<any>();
   const [events, setEvents] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [aquiredTickets, setAquiredTickets] = useState<any>([]);
+  const { aquiredTickets } = currentEvent || [null];
 
+  const setAquiredTickets = (temp: any) => {
+    setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
+  }
   const fetchEvents = async () => {
     const fetchedEvents = await getEvents();
     setEvents(fetchedEvents);
@@ -21,6 +24,17 @@ const EventsProvider = ({ children }: props) => {
   const postNewEvents = async () => {
     await postEvents();
   }
+  useMemo(() => {
+    let templ = events.map((ev: any) => {
+      if (ev.name === currentEvent.name) {
+        return currentEvent
+      }
+      else {
+        return ev
+      }
+    });
+    setEvents(templ);
+  }, [currentEvent?.aquiredTickets])
 
   return (
     <EventsContext.Provider

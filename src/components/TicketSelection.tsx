@@ -36,7 +36,7 @@ const TicketSelection = () => {
           delete tempTicket.cantLeft;
         }
       })
-      if (eventsContext.aquiredTickets.length !== 0) {
+      if (eventsContext?.aquiredTickets?.length !== 0) {
         tempTicketList = eventsContext.aquiredTickets;
       }
       tempTicketList = [...tempTicketList, tempTicket];
