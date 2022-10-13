@@ -16,33 +16,30 @@ const TicketSelection = () => {
     console.log(e.valueOf())
     setRadioValue(e.valueOf())
   }
-  const handleAdd = (value: any) => {
-    let tempTicket: any = {};
-    let tempTicketList = [];
-    const tktExists = eventsContext.aquiredTickets?.find((ticket: any) => ticket.name === value) || false;
-    if (tktExists) {
-      tempTicketList = eventsContext.aquiredTickets?.map((ticket: any) => {//Search the existing ticket to update its value
-        if (ticket.name === value) {
-          tempTicket = { ...ticket, cant: ticket.cant + 1 }
-          return tempTicket;
-        } else {
-          return ticket;
-        }
-      })
-    } else {
-      eventsContext.currentEvent?.ticketTypes?.forEach((ticket: any) => {
-        if (ticket.name === value) {
-          tempTicket = { ...ticket, cant: 1 }
-          delete tempTicket.cantLeft;
-        }
-      })
-      if (eventsContext?.aquiredTickets?.length !== 0) {
-        tempTicketList = eventsContext.aquiredTickets;
+
+  const newTicket = (ticketName: string)=>{
+    let tempTicket;
+    eventsContext.currentEvent?.ticketTypes?.forEach((ticket: any) => {
+      if (ticket.name === ticketName) {
+        tempTicket = { ...ticket, cant: 1 }
+        delete tempTicket.cantLeft;
       }
-      tempTicketList = [...tempTicketList, tempTicket];
-    }
-    eventsContext.setAquiredTickets(tempTicketList);
+    });
+    return tempTicket;
   }
+
+  const handleAdd = (ticketName: string) => {
+    const tktIndex = eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName);
+    let aquiredTicketsCopy = eventsContext.aquiredTickets.slice();
+    if (tktIndex>=0) {
+      aquiredTicketsCopy[tktIndex].cant++;
+    } else {
+      aquiredTicketsCopy.push(newTicket(ticketName));
+    }
+    eventsContext.setAquiredTickets(aquiredTicketsCopy);
+  }
+
+  
   return (
     <>
       <Box minWidth='50%' gap='2' mt={"50px"}>
@@ -54,14 +51,14 @@ const TicketSelection = () => {
             <Text fontSize={subtitleTextSize} fontWeight={'bold'}>
               Available options:</Text>
             <Stack direction={'row'} justifyContent={'flex-start'} gap={6} spacing={[4, 4, 4, 6]} >
-              {eventsContext.currentEvent?.ticketTypes?.map((tiket: any, i: number) => {
+              {eventsContext.currentEvent?.ticketTypes?.map((ticket: any, i: number) => {
                 return <>
-                  <Radio value={`${tiket?.name}`}>
+                  <Radio value={`${ticket?.name}`}>
                     <Text fontSize={nomralTextSize} fontWeight={'bold'}>
-                      {tiket?.name}</Text>
+                      {ticket?.name}</Text>
                     <Spacer />
                     <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
-                      {tiket?.cantLeft !== 0 ? tiket?.cantLeft + ' Left' : 'SoldOut'} </Text>
+                      {ticket?.cantLeft !== 0 ? ticket?.cantLeft + ' Left' : 'SoldOut'} </Text>
                   </Radio>
                 </>
               })}
@@ -81,7 +78,7 @@ const TicketSelection = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {aquiredTickets?.map((ticket: any) => { return <TicketRowInfo ticket={ticket} handleAdd={() => handleAdd(ticket.name)} handleSubs={() => handleAdd(ticket.name)} /> })}
+              {aquiredTickets?.map((ticket: any) => { return <TicketRowInfo ticket={ticket} handleAdd={() => handleAdd(ticket?.name)} handleSubs={() => handleAdd(ticket?.name)} /> })}
             </Tbody>
             <Tfoot>
               <Tr>
