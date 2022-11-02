@@ -13,16 +13,15 @@ const TicketSelection = () => {
   const { aquiredTickets } = eventsContext;
 
   const handleOnChangeRB = (e: any) => {
-    console.log(e.valueOf())
     setRadioValue(e.valueOf())
   }
 
-  const newTicket = (ticketName: string)=>{
+  const newTicket = (ticketName: string) => {
     let tempTicket;
     eventsContext.currentEvent?.ticketTypes?.forEach((ticket: any) => {
       if (ticket.name === ticketName) {
-        tempTicket = { ...ticket, cant: 1 }
-        delete tempTicket.cantLeft;
+        tempTicket = { ...ticket, quantity: 1 }
+        delete tempTicket.quantityLeft;
       }
     });
     return tempTicket;
@@ -30,16 +29,14 @@ const TicketSelection = () => {
 
   const handleAdd = (ticketName: string) => {
     const tktIndex = eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName);
-    let aquiredTicketsCopy = eventsContext.aquiredTickets.slice();
-    if (tktIndex>=0) {
-      aquiredTicketsCopy[tktIndex].cant++;
+    let aquiredTicketsCopy = eventsContext.aquiredTickets?.slice() || [];
+    if (tktIndex >= 0) {
+      aquiredTicketsCopy[tktIndex].quantity++;
     } else {
       aquiredTicketsCopy.push(newTicket(ticketName));
     }
     eventsContext.setAquiredTickets(aquiredTicketsCopy);
   }
-
-  
   return (
     <>
       <Box minWidth='50%' gap='2' mt={"50px"}>
@@ -58,7 +55,7 @@ const TicketSelection = () => {
                       {ticket?.name}</Text>
                     <Spacer />
                     <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
-                      {ticket?.cantLeft !== 0 ? ticket?.cantLeft + ' Left' : 'SoldOut'} </Text>
+                      {ticket?.quantityLeft !== 0 ? ticket?.quantityLeft + ' Left' : 'SoldOut'} </Text>
                   </Radio>
                 </>
               })}
@@ -73,7 +70,7 @@ const TicketSelection = () => {
               <Tr>
                 <Th>Ticket name</Th>
                 <Th>Price</Th>
-                <Th>Cant</Th>
+                <Th>quantity</Th>
                 <Th>Total</Th>
               </Tr>
             </Thead>

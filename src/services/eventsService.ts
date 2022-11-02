@@ -1,7 +1,7 @@
-import { collection, getDocs, doc, setDoc, addDoc } from "@firebase/firestore";
+import { collection, doc, getDoc, addDoc, getDocs } from "@firebase/firestore";
 import { db } from "./firebaseService";
 import dayjs from "dayjs";
-import { validateYupSchema } from "formik";
+import { async } from "@firebase/util";
 
 const eventsCollectionRef = collection(db, "events");
 
@@ -11,18 +11,47 @@ export const getEvents = async () => {
 };
 
 export const buyTickets = async (useInfo: any, eventInfo: any) => {
-	const  data  = await addDoc(collection(db, "sold_tickets"), {
-		...useInfo,
-		tickets: eventInfo.aquiredTickets,
-		eventId: eventInfo.id,
-    validated: false,
+	try {
+		const promisesBuffer: any = [];
+
+		const userOrder = await addDoc(collection(db, "user_orders"), {
+			...useInfo,
+			eventId: eventInfo.id,
+		});
+
+		eventInfo.aquiredTickets.forEach((ticket: any) => {
+			for (
+				let quantityPerType = 0;
+				quantityPerType < ticket.quantity;
+				quantityPerType++
+			) {
+				promisesBuffer.push(saveTicket(ticket, userOrder.id));
+			}
+		});
+
+		const savedTickets = await Promise.all(promisesBuffer);
+		return {
+			userOrderID: userOrder.id,
+			tickets: savedTickets.map((ticket: any) => ({
+				...ticket.data(),
+				id: ticket.id,
+			})),
+		};
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const saveTicket = async (ticket: any, userOrderID: string) => {
+	const savedDoc = await addDoc(collection(db, "sold_tickets"), {
+		type: ticket.name,
+		order: userOrderID,
+		validated: false,
 	});
-  console.log(data.id);
-	return data.id;
+	return getDoc(doc(db, "sold_tickets", savedDoc.id));
 };
 
 export const postEvents = async () => {
-	console.log("posting..");
 	await addDoc(collection(db, "events"), {
 		name: "Secrets Event",
 		location: "Salon El Prado",
@@ -35,20 +64,19 @@ export const postEvents = async () => {
 		ticketTypes: [
 			{
 				name: "Standard",
-				cantLeft: 25,
+				quantityLeft: 25,
 				price: 5000,
 			},
 			{
 				name: "VIP",
-				cantLeft: 15,
+				quantityLeft: 15,
 				price: 5000,
 			},
 			{
 				name: "DELUXE",
-				cantLeft: 20,
+				quantityLeft: 20,
 				price: 5000,
 			},
 		],
 	});
-	await console.log("posted");
 };

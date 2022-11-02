@@ -13,15 +13,14 @@ const TicketRowInfo = ({ ticket, handleSubs, handleAdd }: TProp) => {
       <Td >
         <Text as={'button'} fontSize={'2xl'} fontWeight={'bold'} marginRight={2} color='red.300' onClick={handleSubs}>-
         </Text>
-        <Input type={'number'} width={'25%'} value={ticket?.cant}
-          onChange={(e: any) => { (ticket = { ...ticket, cant: e.target.value }) }}
+        <Input type={'number'} width={'25%'} value={ticket?.quantity}
+          onChange={(e: any) => { (ticket = { ...ticket, quantity: e.target.value }) }}
         />
-        {/* {ticket?.cant} */}
         {/* TODO: Make field editable */}
         <Text as={'button'} fontSize={'xl'} fontWeight={'bold'} marginLeft={2} color='teal.300' onClick={handleAdd}>+
         </Text>
       </Td>
-      <Td >{(ticket?.price * ticket?.cant).toString()}</Td>
+      <Td >{(ticket?.price * ticket?.quantity).toString()}</Td>
     </Tr>
   )
 }

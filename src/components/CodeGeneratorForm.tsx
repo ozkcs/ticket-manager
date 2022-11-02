@@ -1,11 +1,13 @@
-import { Box, Stack, Text, Button, Flex, Heading, Spacer, useBoolean } from "@chakra-ui/react";
+import { Box, Stack, Text, Button, Flex, Heading } from "@chakra-ui/react";
 import FormInput from "./FormInput";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import useEvents from '../hooks/useEvents';
 import { buyTickets } from '../services/eventsService';
+import { useNavigate } from "react-router-dom";
 
 const CodeGeneratorForm = () => {
+  const navigate = useNavigate();
   const eventsContext = useEvents();
   const { currentEvent } = eventsContext;
 
@@ -22,11 +24,17 @@ const CodeGeneratorForm = () => {
       email: Yup.string().required("This field is required"),
       phone: Yup.string().required("This field is required"),
     }),
-    onSubmit: (values: any, actions: any) => {
-      eventsContext.setQrValue(buyTickets(values, currentEvent));
-      actions.resetForm();
+    onSubmit: async (values: any, actions: any) => {
+      const qrValuesFetch: any = await buyTickets(values, currentEvent);
+      if (qrValuesFetch && qrValuesFetch.tickets.length > 0 && qrValuesFetch.userOrderID) {
+        eventsContext.setOrderID(qrValuesFetch.userOrderID);
+        eventsContext.setTicketsPurchaised(qrValuesFetch.tickets)
+        actions.resetForm();
+        navigate("/purchased-codes");
+      }
     }
   })
+
   return (
     <Box className="code-generator-form" mb={"50px"}>
       <Box as='form' minWidth='max-content' alignItems='center' gap='2' mt={"50px"} onSubmit={formik.handleSubmit}>
