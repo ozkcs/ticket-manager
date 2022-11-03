@@ -9,9 +9,7 @@ const PuchasedCodes = () => {
   return (
     <Box pl={[4, 4, '5%', '5%']} pr={[4, 4, '5%', '5%']} >
       <EventBanner />
-      {eventsContext.ticketsPurchased &&
-        <QRGenerator />
-      }
+      <QRGenerator />
     </Box>)
 };
 

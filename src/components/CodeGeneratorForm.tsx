@@ -3,7 +3,7 @@ import FormInput from "./FormInput";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import useEvents from '../hooks/useEvents';
-import { buyTickets } from '../services/eventsService';
+import { buyTickets } from '../services/ticketsService';
 import { useNavigate } from "react-router-dom";
 
 const CodeGeneratorForm = () => {
@@ -25,10 +25,9 @@ const CodeGeneratorForm = () => {
       phone: Yup.string().required("This field is required"),
     }),
     onSubmit: async (values: any, actions: any) => {
-      const qrValuesFetch: any = await buyTickets(values, currentEvent);
-      if (qrValuesFetch && qrValuesFetch.tickets.length > 0 && qrValuesFetch.userOrderID) {
-        eventsContext.setOrderID(qrValuesFetch.userOrderID);
-        eventsContext.setTicketsPurchaised(qrValuesFetch.tickets)
+      const orderId = await buyTickets(values, currentEvent);
+      if (orderId){
+        eventsContext.setOrderID(orderId);
         actions.resetForm();
         navigate("/purchased-codes");
       }
