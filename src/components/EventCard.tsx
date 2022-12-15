@@ -1,4 +1,4 @@
-import { Box, Stack, Text, Heading, Spacer } from "@chakra-ui/react";
+import { Box, Stack, Text, Heading, Spacer, useColorModeValue } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 import useEvents from "../hooks/useEvents";
@@ -9,13 +9,15 @@ interface props {
 const EventCard = ({ event, index }: props) => {
   const navigate = useNavigate();
   const eventsContext = useEvents();
+  const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
 
   const handleOnClick = () => {
     eventsContext.setCurrentEvent(event);
     navigate('generate-code');
   }
+
   return (
-    <Box as="button" maxWidth='500px' minWidth='450px' borderRadius='10' borderWidth='3px' borderColor={'teal.200'} p='4' onClick={handleOnClick} _hover={{ bg: "blue.900" }}>
+    <Box as="button" maxWidth='500px' minWidth='450px' borderRadius='10' borderWidth='3px' borderColor={'teal.200'} p='4' onClick={handleOnClick} _hover={{ bg: hoverColor }}>
       <Box maxWidth='100%' minWidth='50%' minHeight={'200px'} borderRadius='10' borderWidth='3px' borderColor={'teal.200'} >
       </Box>
       <Stack spacing={7}>

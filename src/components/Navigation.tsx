@@ -11,10 +11,9 @@ const Navigation = () => {
   useEffect(() => {
     eventsContext.fetchEvents();
     // eventsContext.postNewEvents(); //uncomment if need to post a new event
-    //TODO: Add params to method
-  }, []);
+  });
   return (
-    <Flex minWidth='max-content' alignItems='center' gap='2' justifyContent="space-between" padding="2" direction={['column', 'column', 'row', 'row']} >
+    <Flex w={'100vw'}  maxW={'100%'} alignItems='center' gap='2' justifyContent="space-between" padding="2" direction={['column', 'column', 'row', 'row']} >
       <EventSelector />
       <Stack direction='row' spacing={4} align='center'>
         <Button colorScheme='teal' variant='ghost' onClick={() => navigate('generate-code')}>
