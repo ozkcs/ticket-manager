@@ -1,6 +1,9 @@
 
 import { createContext, useMemo, useState } from 'react'
 import { getEvents, postEvents } from "../services/eventsService";
+import { interactivity } from '@chakra-ui/react';
+import { TOrder } from '../types/Order';
+import { MOCKED_EVENTS } from '../data-mockups/eventMockup';
 
 const EventsContext = createContext<any>(null);
 interface props {
@@ -12,6 +15,7 @@ const EventsProvider = ({ children }: props) => {
   const [events, setEvents] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [orderID, setOrderID] = useState<string>();
+  const [currentOrder, setCurrentOrder] = useState<TOrder>()
   const [pruchasedTickets, setPruchasedTickets] = useState();
   const { aquiredTickets } = currentEvent || [null];
 
@@ -19,8 +23,8 @@ const EventsProvider = ({ children }: props) => {
     setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
   }
   const fetchEvents = async () => {
-    const fetchedEvents = await getEvents();
-    setEvents(fetchedEvents);
+    // const fetchedEvents = await getEvents();
+    setEvents(MOCKED_EVENTS);
     setIsLoading(false);
   };
   const postNewEvents = async () => {
@@ -45,6 +49,7 @@ const EventsProvider = ({ children }: props) => {
         events, setEvents,
         isLoading, setIsLoading,
         orderID, setOrderID,
+        currentOrder, setCurrentOrder,
         pruchasedTickets, setPruchasedTickets,
         aquiredTickets, setAquiredTickets,
         fetchEvents, postNewEvents

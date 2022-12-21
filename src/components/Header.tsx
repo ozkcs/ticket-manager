@@ -3,6 +3,7 @@ import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { useNavigate } from "react-router-dom";
 import { Logo } from '../Logo';
 import useEvents from '../hooks/useEvents';
+import { IconLogout } from '@tabler/icons';
 
 const Header = () => {
   const eventsContext = useEvents();
@@ -17,7 +18,7 @@ const Header = () => {
       <Spacer />
       <ButtonGroup gap='2'>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <Button colorScheme='teal'>Log Out</Button>
+        <Button colorScheme='teal' gap={2}>Log Out<IconLogout/></Button>
       </ButtonGroup>
     </Flex>
   )
