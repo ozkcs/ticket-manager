@@ -1,15 +1,16 @@
 import { Flex, Spinner, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { QRCode as QRCodeLogo } from 'react-qrcode-logo';
+import { TTicket } from '../types/ticket';
 import { nomralTextSize } from '../utils/ResponsiveStyles'
 
-interface QRCodeProps {
+interface IQRCodeProps {
   orderID: string
-  ticket: any
+  ticket: TTicket
 }
 
-const QRCode = ({ orderID, ticket }: QRCodeProps) => {
-  const [isLoading, setIsLoading] = useState(true);
+const QRCode = ({ orderID, ticket }: IQRCodeProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -24,17 +25,20 @@ const QRCode = ({ orderID, ticket }: QRCodeProps) => {
         <Spinner /> :
         <>
           <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>{ticket.type}</Text>
-          <QRCodeLogo value={`${orderID},${ticket.id}`}
+          <QRCodeLogo 
+            value={`${orderID},${ticket.id}`}
             ecLevel='H'
             size={250}
             qrStyle='dots'
             eyeRadius={5}
             bgColor={'transparent'} fgColor={'#1a202c'}
-          // eyeColor={{ outer: '#61dafb', inner: '#b73a3b' }}
-          // logoImage={logo} logoHeight={15} logoWidth={15}
+            // eyeColor={{ outer: '#61dafb', inner: '#b73a3b' }}
+            // logoImage={logo} logoHeight={15} logoWidth={15}
           />
           {!ticket.validated ?
-            <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>Avalaible</Text>
+            <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>
+              Id: {ticket?.id}
+            </Text>
             : <Text color={'#1a202c'} fontWeight={'bold'}>Used</Text>}
         </>}
     </Flex>
