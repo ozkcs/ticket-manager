@@ -1,26 +1,38 @@
-import { Button, Input, Td, Tr, Text } from "@chakra-ui/react"
+import { Button, Input, Td, Tr, Text, useNumberInput } from "@chakra-ui/react"
+import { useEffect } from "react"
 
-type TProp = {
+interface ITicketRowInfoProps {
   ticket: any
-  handleAdd: any
-  handleSubs: any
+  handleOnChange:Function
 }
-const TicketRowInfo = ({ ticket, handleSubs, handleAdd }: TProp) => {
+const TicketRowInfo = ({ ticket, handleOnChange }: ITicketRowInfoProps) => {
+
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps, valueAsNumber } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 1,
+      min: 1,
+      max: 10,
+    })
+
+  const inc = getIncrementButtonProps()
+  const dec = getDecrementButtonProps()
+  const input = getInputProps()
+
+  useEffect(() => {
+    handleOnChange(ticket?.name, valueAsNumber)
+  }, [valueAsNumber])
+
   return (
     <Tr>
       <Td>{ticket?.name}</Td>
       <Td>{ticket?.price}</Td>
       <Td >
-        <Text as={'button'} fontSize={'2xl'} fontWeight={'bold'} marginRight={2} color='red.300' onClick={handleSubs}>-
-        </Text>
-        <Input type={'number'} width={'25%'} value={ticket?.quantity}
-          onChange={(e: any) => { (ticket = { ...ticket, quantity: e.target.value }) }}
-        />
-        {/* TODO: Make field editable */}
-        <Text as={'button'} fontSize={'xl'} fontWeight={'bold'} marginLeft={2} color='teal.300' onClick={handleAdd}>+
-        </Text>
+        <Button {...dec} marginLeft={2} fontSize={'xl'} w={'8'} h={'8'}  fontWeight={'bold'} colorScheme={'red'} textAlign={'center'} >-</Button>
+        <Input type={'number'} value={ticket?.quantity} {...input} width={'25%'} />
+        <Button {...inc} marginLeft={2} fontSize={'xl'} w={'8'} h={'8'}  fontWeight={'bold'} colorScheme={'teal'} textAlign={'center'} >+</Button>
       </Td>
-      <Td >{(ticket?.price * ticket?.quantity).toString()}</Td>
+      <Td >{(ticket?.price * valueAsNumber).toString()}</Td>
     </Tr>
   )
 }

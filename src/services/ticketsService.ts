@@ -10,6 +10,7 @@ import {
 import { db } from "./firebaseService";
 
 const ticketCollection = collection(db, "sold_tickets");
+const ordersCollection = collection(db, "user_orders");
 
 export const buyTickets = async (
 	useInfo: any,
@@ -18,7 +19,7 @@ export const buyTickets = async (
 	try {
 		const promisesBuffer: any = [];
 
-		const userOrder = await addDoc(collection(db, "user_orders"), {
+		const userOrder = await addDoc(ordersCollection, {
 			...useInfo,
 			eventId: eventInfo.id,
 		});
@@ -55,6 +56,12 @@ export const getTicketsByOrder = async (orderId: string): Promise<Array<any> | u
   const buildedTickets = await buildTickets(data.docs);
 	return buildedTickets;
 };
+
 const buildTickets = async (tickets: any): Promise<Array<any> | undefined> => {
 	return await tickets.map((ticket: any) => ({ ...ticket.data(), id: ticket.id }));
 };
+
+export const getOrders = async () =>{
+  const data = await getDocs(ordersCollection);
+  return await data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}

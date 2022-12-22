@@ -26,6 +26,12 @@ const TicketSelection = () => {
     });
     return tempTicket;
   }
+  const handleOnChange = (ticketName: string, value: number) => {
+    let aquiredTicketsCopy = eventsContext.aquiredTickets?.slice() || [];
+    const tktIndex = eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName);
+    aquiredTicketsCopy[tktIndex].quantity = value;
+    eventsContext.setAquiredTickets(aquiredTicketsCopy);
+  }
 
   const handleAdd = (ticketName: string) => {
     const tktIndex = eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName);
@@ -37,6 +43,7 @@ const TicketSelection = () => {
     }
     eventsContext.setAquiredTickets(aquiredTicketsCopy);
   }
+  
   return (
     <>
       <Box minWidth='50%' gap='2' mt={"50px"}>
@@ -75,7 +82,7 @@ const TicketSelection = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {aquiredTickets?.map((ticket: any) => { return <TicketRowInfo ticket={ticket} handleAdd={() => handleAdd(ticket?.name)} handleSubs={() => handleAdd(ticket?.name)} /> })}
+              {aquiredTickets?.map((ticket: any) => { return <TicketRowInfo ticket={ticket} handleOnChange={handleOnChange} /> })}
             </Tbody>
             <Tfoot>
               <Tr>

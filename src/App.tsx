@@ -12,6 +12,7 @@ import EventGallery from './views/EventGallery';
 import GenerateCode from "./views/GenerateCode";
 import ValidateCode from './views/ValidateCode';
 import PuchasedCodes from './views/PurchasedCodes';
+import OrderHistory from './views/OrderHistory';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -26,6 +27,7 @@ export const App = () => (
           <Route path="/generate-code" element={<GenerateCode />} />
           <Route path="/validate-code" element={<ValidateCode />} />
           <Route path="/purchased-codes" element={<PuchasedCodes />} />
+          <Route path="/order-history" element={<OrderHistory />} />
         </Routes>
       </EventsProvider>
     </BrowserRouter>
