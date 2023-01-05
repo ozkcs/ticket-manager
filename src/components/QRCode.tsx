@@ -5,7 +5,7 @@ import { TTicket } from '../types/ticket';
 import { nomralTextSize } from '../utils/ResponsiveStyles'
 
 interface IQRCodeProps {
-  orderID: string
+  orderID: string | undefined
   ticket: TTicket
 }
 
@@ -18,22 +18,19 @@ const QRCode = ({ orderID, ticket }: IQRCodeProps) => {
     }, 500)
   }, [])
 
-
   return (
     <Flex flexDir={'column'} justifyContent={'center'} alignItems={'center'} backgroundColor={ticket.validated ? 'grey.100' : 'teal.200'} p={2} width={'fit-content'} height={'fit-content'} borderRadius={10}>
       {isLoading ?
         <Spinner /> :
         <>
           <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>{ticket.type}</Text>
-          <QRCodeLogo 
+          <QRCodeLogo
             value={`${orderID},${ticket.id}`}
             ecLevel='H'
             size={250}
             qrStyle='dots'
             eyeRadius={5}
             bgColor={'transparent'} fgColor={'#1a202c'}
-            // eyeColor={{ outer: '#61dafb', inner: '#b73a3b' }}
-            // logoImage={logo} logoHeight={15} logoWidth={15}
           />
           {!ticket.validated ?
             <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>

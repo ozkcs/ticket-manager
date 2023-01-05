@@ -26,10 +26,10 @@ const CodeGeneratorForm = () => {
     }),
     onSubmit: async (values: any, actions: any) => {
       const orderId = await buyTickets(values, currentEvent);
-      if (orderId){
+      if (orderId) {
         eventsContext.setOrderID(orderId);
         actions.resetForm();
-        navigate("/purchased-codes");
+        navigate("/ticket-summary");
       }
     }
   })
