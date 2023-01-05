@@ -4,3 +4,8 @@ export type TTicket = {
   type: string,
   validated?: boolean,
 };
+
+export enum EHandlerIncDec {
+ dec = 'DECREMENT',
+ inc = 'INCREMENT'
+}
