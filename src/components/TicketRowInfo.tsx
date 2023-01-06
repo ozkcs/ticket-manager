@@ -9,16 +9,12 @@ interface ITicketRowInfoProps {
 
 const TicketRowInfo = ({ ticket, handleOnChange }: ITicketRowInfoProps) => {
 
-  // ticket quantity like a counter & ticket.quantity as default value
   const [ticketQuantity, setTicketQuantity] = useState<number>(ticket.quantity || 0)
 
   useEffect(() => {
-    // updates the state from add button
     if (ticket?.quantity !== ticketQuantity) setTicketQuantity(ticketQuantity + 1)
   }, [ticket?.quantity])
 
-
-  // updates the state regarding the onchange action
   const handleQuantityEntries = ({target : { value }}: React.ChangeEvent<HTMLInputElement>) => () => {
     const valueToNumber = +value 
     if ((valueToNumber >= 0) && (valueToNumber <= 10)) {
@@ -27,11 +23,10 @@ const TicketRowInfo = ({ ticket, handleOnChange }: ITicketRowInfoProps) => {
     return;
    }
 
-  // generic function to handle both actions [increment, decrement]
   const ticketsQuantityHandler = (key: string) => () => {
     if (key === EHandlerIncDec.dec) {
-      setTicketQuantity(+ticketQuantity - 1) // UI counter
-      handleOnChange(ticket?.name, +ticketQuantity - 1) // value that will be sended to the service
+      setTicketQuantity(+ticketQuantity - 1)
+      handleOnChange(ticket?.name, +ticketQuantity - 1)
     } else {
       setTicketQuantity(+ticketQuantity + 1)
       handleOnChange(ticket?.name, +ticketQuantity + 1)
