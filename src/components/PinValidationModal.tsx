@@ -18,7 +18,7 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
   }, []);
 
   const handleSendCode = async () => {
-    const phone = '+50683108634'
+    const phone = '+50684685382'
     const recapcha = new RecaptchaVerifier(
       'auth-container',
       {'size': 'invisible'},

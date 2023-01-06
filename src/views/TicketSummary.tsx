@@ -7,6 +7,7 @@ import Ticket from '../components/Ticket';
 import { TTicket } from '../types/ticket';
 import EventBanner from '../components/EventBanner';
 import TicketGrid from '../components/TicketGrid';
+import { MOCKED_SOLD_TICKETS } from '../data-mockups/sold_ticketMockup';
 
 const QRGenerator = () => {
   const eventsContext = useEvents();
@@ -26,7 +27,8 @@ const QRGenerator = () => {
       //     console.log(err);
       //     //TODO: Handle Error
       //   });
-
+      setPruchasedTickets(MOCKED_SOLD_TICKETS.filter((ticket: TTicket) => ticket.order === orderID));
+      setIsLoading(false);
     }
   }, []);
 

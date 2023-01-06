@@ -24,7 +24,7 @@ const OrderHistory = () => {
   const handleClick = (order: TOrder) => {
     setOrderID(order.id);
     setCurrentOrder(order);
-    navigate('ticket-summary');
+    navigate('/admin/ticket-summary');
   }
 
   return (
