@@ -9,8 +9,9 @@ import TicketRowInfo from './TicketRowInfo';
 
 const TicketSelection = () => {
   const eventsContext = useEvents();
-  const [radioValue, setRadioValue] = useState<any>('0')
+  const [radioValue, setRadioValue] = useState<string>('0')
   const { aquiredTickets } = eventsContext;
+  const [currentTypeOfTicket, setCurrentTypeOfTicket] = useState<boolean>(false)
 
   const handleOnChangeRB = (e: any) => {
     setRadioValue(e.valueOf())
@@ -26,18 +27,25 @@ const TicketSelection = () => {
     });
     return tempTicket;
   }
+
+  const findIndexedTicket = (ticketName: string) =>
+    eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName)
+
   const handleOnChange = (ticketName: string, value: number) => {
     let aquiredTicketsCopy = eventsContext.aquiredTickets?.slice() || [];
-    const tktIndex = eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName);
+    const tktIndex = findIndexedTicket(ticketName);
     aquiredTicketsCopy[tktIndex].quantity = value;
+    aquiredTicketsCopy[tktIndex].quantity > 9 ? setCurrentTypeOfTicket(true) : setCurrentTypeOfTicket(false)
     eventsContext.setAquiredTickets(aquiredTicketsCopy);
   }
 
+
   const handleAdd = (ticketName: string) => {
-    const tktIndex = eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName);
+    const tktIndex = findIndexedTicket(ticketName);
     let aquiredTicketsCopy = eventsContext.aquiredTickets?.slice() || [];
     if (tktIndex >= 0) {
       aquiredTicketsCopy[tktIndex].quantity++;
+      aquiredTickets[tktIndex].quantity > 9 ? setCurrentTypeOfTicket(true) : setCurrentTypeOfTicket(false)
     } else {
       aquiredTicketsCopy.push(newTicket(ticketName));
     }
@@ -50,7 +58,7 @@ const TicketSelection = () => {
         <Heading size='lg' as='h2' >
           Ticket Configuration
         </Heading >
-        <RadioGroup colorScheme='teal' size='lg' onChange={(e) => { handleOnChangeRB(e) }} value={radioValue}>
+        <RadioGroup colorScheme='teal' size='lg' onChange={(e) => handleOnChangeRB(e)} value={radioValue}>
           <Stack direction={['column', 'column', 'row', 'row']} marginTop={4} gap={[2, 2, 4, 6]} spacing={[2, 2, 4, 6]} >
             <Text fontSize={subtitleTextSize} fontWeight={'bold'}>
               Available options:</Text>
@@ -66,7 +74,7 @@ const TicketSelection = () => {
                   </Radio>
                 </>
               })}
-              <Button disabled={radioValue === '0'} colorScheme={'teal'} onClick={() => handleAdd(radioValue)} >Add</Button>
+              <Button disabled={radioValue === '0' || currentTypeOfTicket} colorScheme={'teal'} onClick={() => handleAdd(radioValue)} >Add</Button>
             </Stack>
           </Stack>
         </RadioGroup>
@@ -82,7 +90,7 @@ const TicketSelection = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {aquiredTickets?.map((ticket: any) => { return <TicketRowInfo ticket={ticket} handleOnChange={handleOnChange} /> })}
+              {aquiredTickets?.map((ticket: any) => <TicketRowInfo ticket={ticket} handleOnChange={handleOnChange} /> )}
             </Tbody>
             <Tfoot>
               <Tr>
