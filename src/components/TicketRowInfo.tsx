@@ -20,7 +20,6 @@ const TicketRowInfo = ({ ticket, handleOnChange }: ITicketRowInfoProps) => {
     if ((valueToNumber >= 0) && (valueToNumber <= 10)) {
       setTicketQuantity(valueToNumber)
     }
-    return;
    }
 
   const ticketsQuantityHandler = (key: string) => () => {
