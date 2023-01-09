@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import CenteredLayout from '../layout/CenteredLayout'
 import { Button, Center, Flex, Stack, Text } from '@chakra-ui/react'
 import { getOrders } from '../services/ticketsService'
 import { TOrder } from '../types/Order'
@@ -15,7 +14,7 @@ const OrderHistory = () => {
 
   const fetchOrders = async () => {
     // setOrders(await getOrders());
-   setOrders(MOCKED_ORDERS)
+    setOrders(MOCKED_ORDERS)
   }
 
   useEffect(() => {
@@ -25,22 +24,20 @@ const OrderHistory = () => {
   const handleClick = (order: TOrder) => {
     setOrderID(order.id);
     setCurrentOrder(order);
-    navigate('/purchased-codes');
+    navigate('/admin/ticket-summary');
   }
 
   return (
-    <CenteredLayout>
-      <Stack>
-        {orders && orders?.map((order: TOrder) =>
-          <Flex w={'100%'} h={'100px'} gap={2}>
-            <Center  w={'100%'} gap={8}>
-              <Text>Order ID: {order.eventId}</Text>
-              <Button onClick={() => handleClick(order)}>View Order Details</Button>
-            </Center>
-          </Flex>
-        )}
-      </Stack>
-    </CenteredLayout>
+    <Stack>
+      {orders && orders?.map((order: TOrder) =>
+        <Flex w={'100%'} h={'100px'} gap={2}>
+          <Center w={'100%'} gap={8}>
+            <Text>Order ID: {order.eventId}</Text>
+            <Button onClick={() => handleClick(order)}>View Order Details</Button>
+          </Center>
+        </Flex>
+      )}
+    </Stack>
   )
 }
 

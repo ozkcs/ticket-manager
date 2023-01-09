@@ -11,14 +11,14 @@ const Header = () => {
 
   return (
     <Flex w={'100vw'} maxW={'100%'} alignItems='center' gap='2' p="2">
-      <Box as='button' p='2' display='flex' alignItems="center"  onClick={() => {navigate('/'); eventsContext.setCurrentEvent(null)}}>
+      <Box as='button' p='2' display='flex' alignItems="center" onClick={() => { navigate('/admin'); eventsContext.setCurrentEvent(null) }}>
         <Logo h="6vmin" mr="5" />
-        <Heading  size='md'> Ticket Manager App</Heading>
+        <Heading size='md'> Ticket Manager App</Heading>
       </Box>
       <Spacer />
       <ButtonGroup gap='2'>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <Button colorScheme='teal' gap={2}>Log Out<IconLogout/></Button>
+        <Button colorScheme='teal' gap={2}>Log Out<IconLogout /></Button>
       </ButtonGroup>
     </Flex>
   )

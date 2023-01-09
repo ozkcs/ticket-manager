@@ -28,13 +28,13 @@ const Navigation = () => {
             Validate Code
           </Hide>
         </Button>
-        <Button colorScheme='teal' variant='ghost' gap={2} onClick={() => navigate('/')}>
+        <Button colorScheme='teal' variant='ghost' gap={2} onClick={() => navigate('/admin')}>
           <IconReportAnalytics />
           <Hide below='lg'>
             Reporting
           </Hide>
         </Button>
-        <Button colorScheme='teal' variant='ghost' gap={2} onClick={() => navigate('/order-history')}>
+        <Button colorScheme='teal' variant='ghost' gap={2} onClick={() => navigate('order-history')}>
           <IconNotes />
           <Hide below='lg'>
             Order History

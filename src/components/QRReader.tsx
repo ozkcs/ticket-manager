@@ -1,7 +1,7 @@
-import { RepeatIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, IconButton, Stack, useMediaQuery } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Hide, IconButton, Stack, useMediaQuery } from '@chakra-ui/react';
 import { useSize } from "@chakra-ui/react-use-size"
-import { useState, useRef, RefObject, useEffect } from 'react'
+import { IconCameraRotate } from '@tabler/icons';
+import { useState, useRef, RefObject } from 'react'
 // @ts-ignore
 import QrReader from 'react-qr-scanner';
 import adapter from 'webrtc-adapter';
@@ -25,23 +25,17 @@ const QRReader = () => {
   const cameraContRef = useRef() as RefObject<HTMLDivElement>
   const cameraContDim = useSize(cameraContRef)
 
-  const camaraOnMobile  = {
+  const camaraOnMobile = {
     objectFit: 'cover',
-    height: `Calc(${(emptyBoxDim?.width || 0 )} + 100px)`
+    height: `Calc(${(emptyBoxDim?.width || 0)} + 100px)`
   };
-  const camaraOnDesktop  = {
+  const camaraOnDesktop = {
     objectFit: 'cover',
     height: (emptyBoxDim?.width || 0) + 50,
     width: (emptyBoxDim?.width || 0),
   };
 
   const [isDesktopView] = useMediaQuery('(min-width: 48em)')
-
-  useEffect(() => {
-    console.log("have changed")
-
-  }, [isDesktopView])
-  
 
   return (
     <Box >
@@ -69,25 +63,28 @@ const QRReader = () => {
                       console.log(error)
                       console.log(adapter.browserDetails.browser)
                     }}
-                    style={isDesktopView ?  camaraOnDesktop :  camaraOnMobile}
+                    style={isDesktopView ? camaraOnDesktop : camaraOnMobile}
                   />
                 </Box>
               </Center>
             </Flex>
           }
-        {/* @ts-ignore */}
-        <Box ref={emptyBoxRef} h={(emptyBoxDim?.width)} w={['60%', '35%', '20%']} borderStyle={'solid'} borderColor={'black'} borderWidth={10} borderRadius={10} position={'absolute'} visibility={scanning ? 'visible' : 'hidden'} />
+          {/* @ts-ignore */}
+          <Box ref={emptyBoxRef} h={(emptyBoxDim?.width)} w={['60%', '35%', '20%']} borderStyle={'solid'} borderColor={'black'} borderWidth={10} borderRadius={10} position={'absolute'} visibility={scanning ? 'visible' : 'hidden'} />
         </Center>
         <Stack direction={'row'} w={'100%'}>
           <Center gap={2} w={'100%'}>
             <Button w={['75%', '50%']} onClick={toogleScaning}>{scanning ? "Stop Scanning" : "Scan QRCode"}</Button>
-            {scanning && <IconButton
-              colorScheme='teal'
-              aria-label='Flip camara'
-              size='lg'
-              onClick={() => { toggleCamara() }}
-              icon={<RepeatIcon />}
-            />}
+            {scanning &&
+              <Hide above='md'>
+                <IconButton
+                  colorScheme='teal'
+                  aria-label='Flip camara'
+                  size='lg'
+                  onClick={() => { toggleCamara() }}
+                  icon={<IconCameraRotate />}
+                />
+              </Hide>}
           </Center>
         </Stack>
         <Heading>{qrData}</Heading>
