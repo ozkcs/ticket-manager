@@ -33,9 +33,9 @@ const QRGenerator = () => {
   }, []);
 
   const buildWhatsAppLink = () => {
-    const numberValidator = '50687392610' || currentOrder?.phone 
+    const numberValidator = '50687392610' || currentOrder?.phone
     const serviceURL = `https://wa.me/${numberValidator}?text=`
-    const message = `Estimado ${currentOrder?.first_name} en el siguiente link encontrarás tus tiquetes los cuáles pueden ser descargados\n `
+    const message = `Estimado ${currentOrder?.first_name} en el siguiente link encontrarás tus tiquetes los cuáles pueden ser descargados%0a`
     const redirectUserTo = 'https://www.hermosasoftware.io/' || `https://localhost:3000/order/${orderID}`
     return serviceURL.concat(message).concat(redirectUserTo)
   }
