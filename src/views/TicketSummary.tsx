@@ -4,10 +4,11 @@ import useEvents from "../hooks/useEvents";
 import { getTicketsByOrder } from '../services/ticketsService'
 import { IconBrandWhatsapp, IconMail } from '@tabler/icons';
 import Ticket from '../components/Ticket';
-import { TTicket } from '../types/ticket';
+import { TEvents, TTicket, TTicketType } from '../types/ticket';
 import EventBanner from '../components/EventBanner';
 import TicketGrid from '../components/TicketGrid';
 import { MOCKED_SOLD_TICKETS } from '../data-mockups/sold_ticketMockup';
+import { sendLinkQRCodes } from '../utils/whatsAppTemplate';
 
 const QRGenerator = () => {
   const eventsContext = useEvents();
@@ -33,11 +34,16 @@ const QRGenerator = () => {
   }, []);
 
   const buildWhatsAppLink = () => {
-    const numberValidator = '50687392610' || currentOrder?.phone
-    const serviceURL = `https://wa.me/${numberValidator}?text=`
-    const message = `Estimado ${currentOrder?.first_name} en el siguiente link encontrarás tus tiquetes los cuáles pueden ser descargados%0a`
-    const redirectUserTo = 'https://www.hermosasoftware.io/' || `https://localhost:3000/order/${orderID}`
-    return serviceURL.concat(message).concat(redirectUserTo)
+    const typeOfTicket = pruchasedTickets && pruchasedTickets[0]?.type
+    const ticketsQuantities = pruchasedTickets && pruchasedTickets.length
+    // for this 👇 case we can retrieve the data byId and pre-populate the information
+    const { name, location, ticketTypes } = eventsContext.events.filter((item: TEvents) => item.eventId === +currentOrder.eventId)[0]
+    const total = ticketTypes.filter((item: TTicketType) => item.name === typeOfTicket)[0]?.price * ticketsQuantities
+
+    const messageTemplate = sendLinkQRCodes(currentOrder?.first_name, name, '4 de Julio', location, ticketsQuantities, total, typeOfTicket)
+    const userPhoneNumber = `506${currentOrder?.phone}`
+    const serviceURL = `https://api.whatsapp.com/send?phone=${userPhoneNumber}&text=${messageTemplate}`
+    return serviceURL
   }
 
   return (
