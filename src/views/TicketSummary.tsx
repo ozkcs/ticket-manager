@@ -4,14 +4,15 @@ import useEvents from "../hooks/useEvents";
 import { getTicketsByOrder } from '../services/ticketsService'
 import { IconBrandWhatsapp, IconMail } from '@tabler/icons';
 import Ticket from '../components/Ticket';
-import { TTicket } from '../types/ticket';
+import { TEvents, TTicket, TTicketType } from '../types/ticket';
 import EventBanner from '../components/EventBanner';
 import TicketGrid from '../components/TicketGrid';
 import { MOCKED_SOLD_TICKETS } from '../data-mockups/sold_ticketMockup';
+import { sendLinkQRCodes } from '../utils/whatsAppTemplate';
 
 const QRGenerator = () => {
   const eventsContext = useEvents();
-  const { orderID, pruchasedTickets, setPruchasedTickets } = eventsContext;
+  const { orderID, pruchasedTickets, setPruchasedTickets, currentOrder } = eventsContext;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,6 +33,19 @@ const QRGenerator = () => {
     }
   }, []);
 
+  const buildWhatsAppLink = () => {
+    const typeOfTicket = pruchasedTickets && pruchasedTickets[0]?.type
+    const ticketsQuantities = pruchasedTickets && pruchasedTickets.length
+    // for this 👇 case we can retrieve the data byId and pre-populate the information
+    const { name, location, ticketTypes } = eventsContext.events.filter((item: TEvents) => item.eventId === +currentOrder.eventId)[0]
+    const total = ticketTypes.filter((item: TTicketType) => item.name === typeOfTicket)[0]?.price * ticketsQuantities
+
+    const messageTemplate = sendLinkQRCodes(currentOrder?.first_name, name, '4 de Julio', location, ticketsQuantities, total, typeOfTicket)
+    const userPhoneNumber = `506${currentOrder?.phone}`
+    const serviceURL = `https://api.whatsapp.com/send?phone=${userPhoneNumber}&text=${messageTemplate}`
+    return serviceURL
+  }
+
   return (
     <>
       <EventBanner />
@@ -40,7 +54,7 @@ const QRGenerator = () => {
           <HStack justifyContent={'space-between'} width={'100%'}>
             <Heading mb={'10px'}>Select the tickets you want to send</Heading>
             <HStack justifyContent={'space-around'}>
-              <Button variant={'ghost'} colorScheme={'whatapp'}><IconBrandWhatsapp /> Send</Button>
+              <Button as="a" target="_blank" variant={'ghost'} colorScheme={'whatapp'} href={buildWhatsAppLink()}><IconBrandWhatsapp /> Send</Button>
               <Button variant={'ghost'} colorScheme={'messenger'}><IconMail /> Send</Button>
             </HStack>
           </HStack>
