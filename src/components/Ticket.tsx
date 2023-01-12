@@ -9,9 +9,10 @@ import html2canvas from 'html2canvas';
 interface ITicket {
   orderID: string | undefined,
   ticket: TTicket
+  isDownloadable?: boolean | true
 }
 
-const Ticket = ({ orderID, ticket }: ITicket) => {
+const Ticket = ({ orderID, ticket, isDownloadable }: ITicket) => {
   const ticketRef = useRef() as RefObject<any>
   const emptyBoxRef = useRef() as RefObject<HTMLDivElement>
   const emptyBoxDim = useSize(emptyBoxRef)
@@ -40,10 +41,10 @@ const Ticket = ({ orderID, ticket }: ITicket) => {
   const bgCardColor = useColorModeValue('gray.50', 'whiteAlpha.200');
   return (
     <VStack  >
-      <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4}>
+      <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4} borderRadius={10}>
         <VStack width={['400px', '500px', '500px']} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
           <VStack gap={6} w={'100%'} alignItems={'end'}>
-            <Button hidden={isDownloading} onClick={handleDownload} gap={2} ><IconDownload />Descargar</Button>
+            <Button hidden={isDownloading || !isDownloadable} onClick={handleDownload} gap={2} ><IconDownload />Descargar</Button>
           </VStack>
           <HStack width={'100%'}>
             <VStack ml={4} mr={4}>

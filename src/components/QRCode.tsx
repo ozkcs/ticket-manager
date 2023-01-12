@@ -19,7 +19,7 @@ const QRCode = ({ orderID, ticket }: IQRCodeProps) => {
   }, [])
 
   return (
-    <Flex flexDir={'column'} justifyContent={'center'} alignItems={'center'} backgroundColor={ticket.validated ? 'grey.100' : 'teal.200'} p={2} width={'fit-content'} height={'fit-content'} borderRadius={10}>
+    <Flex flexDir={'column'} justifyContent={'center'} alignItems={'center'} backgroundColor={ticket.validated ? 'red.100' : 'teal.200'} p={2} width={'fit-content'} height={'fit-content'} borderRadius={10}>
       {isLoading ?
         <Spinner /> :
         <>
