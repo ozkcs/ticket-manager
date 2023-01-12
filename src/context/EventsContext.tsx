@@ -1,5 +1,5 @@
 
-import { createContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useMemo, useState } from 'react'
 import { getEvents, postEvents } from "../services/eventsService";
 import { interactivity } from '@chakra-ui/react';
 import { TOrder } from '../types/Order';
@@ -22,14 +22,17 @@ const EventsProvider = ({ children }: props) => {
   const setAquiredTickets = (temp: any) => {
     setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
   }
-  const fetchEvents = async () => {
-    // const fetchedEvents = await getEvents();
-    setEvents(MOCKED_EVENTS);
+  const fetchEvents = useCallback(async () => {
+    const fetchedEvents = await getEvents();
+    setEvents(fetchedEvents);
+
     setIsLoading(false);
-  };
+  }, []);
+
   const postNewEvents = async () => {
     await postEvents();
   }
+
   useMemo(() => {
     let templ = events.map((ev: any) => {
       if (ev.name === currentEvent.name) {
