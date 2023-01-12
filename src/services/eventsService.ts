@@ -6,8 +6,12 @@ import { async } from "@firebase/util";
 const eventsCollectionRef = collection(db, "events");
 
 export const getEvents = async () => {
-	const data = await getDocs(eventsCollectionRef);
-	return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+	try {
+		const data = await getDocs(eventsCollectionRef);
+		data.docs.length && data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+	} catch (e) {
+		console.log(e)
+	}
 };
 
 
