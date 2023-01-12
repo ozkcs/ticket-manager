@@ -18,7 +18,7 @@ const TicketGrid = ({ orderID, tickets }: ITicketGrid) =>
     }}
     gap={8}>
     {tickets?.map((ticket: TTicket) =>
-      <Ticket orderID={orderID} ticket={ticket} />
+      <Ticket orderID={orderID} ticket={ticket} isDownloadable />
     )}
   </SimpleGrid>;
 

@@ -6,8 +6,11 @@ import { useState, useRef, RefObject } from 'react'
 import QrReader from 'react-qr-scanner';
 import adapter from 'webrtc-adapter';
 
-const QRReader = () => {
-  const [qrData, setQrData] = useState('');
+interface IQRReader {
+  setQrData: (value: string) => void;
+}
+
+const QRReader = ({ setQrData }: IQRReader) => {
   const [scanning, setScanning] = useState(false);
   const [camera, setCamera] = useState("environment");
 
@@ -87,7 +90,6 @@ const QRReader = () => {
               </Hide>}
           </Center>
         </Stack>
-        <Heading>{qrData}</Heading>
       </Flex>
     </Box >
   );

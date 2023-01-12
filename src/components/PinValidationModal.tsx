@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "@firebase/auth";
 
 interface IPinValidationModal {
-  onPinAccepted: any
+  onPinAccepted: (value: boolean) => void
 }
 
 function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
@@ -13,6 +13,7 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
   const [pinCode, setPinCode] = useState<string>();
   const [confirmationResult, setConfirmationResult] = useState<any>();
   const [codeSent, setCodeSent] = useState<any>(false);
+
   useEffect(() => {
     onOpen();
   }, []);
@@ -21,7 +22,7 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
     const phone = '+50684685382'
     const recapcha = new RecaptchaVerifier(
       'auth-container',
-      {'size': 'invisible'},
+      { 'size': 'invisible' },
       auth
     );
     try {
