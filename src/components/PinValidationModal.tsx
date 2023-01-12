@@ -21,7 +21,7 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
     const phone = '+50684685382'
     const recapcha = new RecaptchaVerifier(
       'auth-container',
-      {'size': 'invisible'},
+      { 'size': 'invisible' },
       auth
     );
     try {
@@ -47,15 +47,15 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
       <>
         <ModalBody pb={6}>
           <Text>
-            For your safety we need to know that is really you.
+            Por seguridad necesitamos saber que eres realmente tu.
           </Text>
           <Text>
-            Click "sent" to receive your security code.
+            Presiona "Enviar" para recibir tu codigo de seguridad.
           </Text>
           <Box id='auth-container' ></Box>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme={'teal'} onClick={handleSendCode}>Send</Button>
+          <Button colorScheme={'teal'} onClick={handleSendCode}>Enviar</Button>
         </ModalFooter>
       </>
     )
@@ -66,14 +66,14 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
       <Modal isCentered closeOnOverlayClick={false} isOpen={isOpen} onClose={handleValidateCode} colorScheme={'teal'}>
         <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px)' />
         <ModalContent>
-          <ModalHeader>Security Code</ModalHeader>
+          <ModalHeader>Codigo de seguridad</ModalHeader>
           {!codeSent
             ? <SendCode />
             : <>
               <ModalBody pb={6}>
                 <Text>
-                  We just sent a 6 digit code to the number linked to this order.
-                  Please enter it below, and "confirm" to see your tickets.
+                  Acabamos de enviar un codigo de 6 digitos ligado a esta orden.
+                  Por favor ingresalo en los siguientes espacios y presiona "Confirmar" para ver tus tiquetes.
                 </Text>
                 <HStack w={'100%'} justifyContent={'space-around'} mt={2} >
                   <PinInput autoFocus value={pinCode} onChange={(value: string) => setPinCode(value)} manageFocus={true}>
@@ -87,7 +87,7 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
                 </HStack>
               </ModalBody>
               <ModalFooter>
-                <Button colorScheme={'teal'} onClick={handleValidateCode}>Confirm</Button>
+                <Button colorScheme={'teal'} onClick={handleValidateCode}>Confirmar</Button>
               </ModalFooter>
             </>
           }
