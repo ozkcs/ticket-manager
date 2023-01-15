@@ -10,6 +10,7 @@ import {
 } from "@firebase/firestore";
 import { db } from "./firebaseService";
 import { TTicket } from "../types/ticket";
+import { TOrder } from "../types/Order";
 
 const ticketCollection = collection(db, "sold_tickets");
 const ordersCollection = collection(db, "user_orders");
@@ -52,9 +53,10 @@ const saveTicket = (ticket: any, userOrderID: string) => {
 	});
 };
 
-export const getOrders = async () => {
+export const getOrders = async ():  Promise<Array<TOrder> | undefined> => {
 	const data = await getDocs(ordersCollection);
-	return await data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  const buildedOrders = await data.docs.map((doc:any) => ({ ...doc.data(), id: doc.id }));
+	return buildedOrders;
 };
 
 export const getTicketsByOrder = async ( orderId: string ): Promise<Array<TTicket> | undefined> => {

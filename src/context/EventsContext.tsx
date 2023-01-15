@@ -1,5 +1,5 @@
 
-import { createContext, useCallback, useMemo, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import { getEvents, postEvents } from "../services/eventsService";
 import { interactivity } from '@chakra-ui/react';
 import { TOrder } from '../types/Order';
@@ -14,7 +14,7 @@ const EventsProvider = ({ children }: props) => {
   const [currentEvent, setCurrentEvent] = useState<any>();
   const [events, setEvents] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [orderID, setOrderID] = useState<string>();
+  // const [orderID, setOrderID] = useState<string>();
   const [currentOrder, setCurrentOrder] = useState<TOrder>()
   const [pruchasedTickets, setPruchasedTickets] = useState();
   const { aquiredTickets } = currentEvent || [null];
@@ -22,12 +22,15 @@ const EventsProvider = ({ children }: props) => {
   const setAquiredTickets = (temp: any) => {
     setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
   }
-  const fetchEvents = useCallback(async () => {
-    const fetchedEvents = await getEvents();
-    setEvents(fetchedEvents);
-
-    setIsLoading(false);
-  }, []);
+  const fetchEvents = async () => {
+    Promise.resolve(getEvents())
+      .then((fetchEvents) => {
+        setEvents(fetchEvents);
+      })
+      .finally(() => setIsLoading(false))
+      .catch((err) => console.log(err)
+      );
+  };
 
   const postNewEvents = async () => {
     await postEvents();
@@ -51,7 +54,7 @@ const EventsProvider = ({ children }: props) => {
         currentEvent, setCurrentEvent,
         events, setEvents,
         isLoading, setIsLoading,
-        orderID, setOrderID,
+        // orderID, setOrderID,
         currentOrder, setCurrentOrder,
         pruchasedTickets, setPruchasedTickets,
         aquiredTickets, setAquiredTickets,

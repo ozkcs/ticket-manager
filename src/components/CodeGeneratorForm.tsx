@@ -29,7 +29,7 @@ const CodeGeneratorForm = () => {
       if (orderId) {
         eventsContext.setOrderID(orderId);
         actions.resetForm();
-        navigate("/ticket-summary");
+        navigate("/admin/ticket-summary");
       }
     }
   })

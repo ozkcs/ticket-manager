@@ -46,7 +46,7 @@ const ClientTicketSummary = () => {
 
   return (
     <>
-      {!isValidPin
+      {isValidPin
         ? <PinValidationModal onPinAccepted={onPinAccepted} />
         : <Stack justifyContent={'center'} alignItems={'center'} alignContent={'center'} mb={10} mt={10}>
           {isLoading

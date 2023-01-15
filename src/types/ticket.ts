@@ -12,8 +12,8 @@ export type TTicketType = {
 }
 
 export type TEvents = {
-  dates: Array<string>
-  eventId: number
+  dates: Array<any>
+  id: string
   location: string
   name: string
   ticketTypes: Array<TTicketType>
