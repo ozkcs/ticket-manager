@@ -1,9 +1,8 @@
 
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 import { getEvents, postEvents } from "../services/eventsService";
-import { interactivity } from '@chakra-ui/react';
 import { TOrder } from '../types/Order';
-import { MOCKED_EVENTS } from '../data-mockups/eventMockup';
+import { TTicket } from '../types/ticket';
 
 const EventsContext = createContext<any>(null);
 interface props {
@@ -14,9 +13,8 @@ const EventsProvider = ({ children }: props) => {
   const [currentEvent, setCurrentEvent] = useState<any>();
   const [events, setEvents] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [orderID, setOrderID] = useState<string>();
-  const [currentOrder, setCurrentOrder] = useState<TOrder>()
-  const [pruchasedTickets, setPruchasedTickets] = useState();
+  const [currentOrder, setCurrentOrder] = useState<TOrder | undefined>()
+  const [pruchasedTickets, setPruchasedTickets] = useState<Array<TTicket> | undefined>();
   const { aquiredTickets } = currentEvent || [null];
 
   const setAquiredTickets = (temp: any) => {

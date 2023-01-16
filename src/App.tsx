@@ -21,7 +21,7 @@ export const App = () => (
             <Route path="" element={<EventGallery />} />
             <Route path="generate-code" element={<GenerateCode />} />
             <Route path="validate-code" element={<ValidateCode />} />
-            <Route path="ticket-summary" element={<TicketSummary />} />
+            <Route path="ticket-summary/:orderID" element={<TicketSummary />} />
             <Route path="order-history" element={<OrderHistory />} />
           </Route>
           <Route path="/order" element={<ClientLayout />} >

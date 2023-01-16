@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Center, Flex, Stack, Text } from '@chakra-ui/react'
 import { getOrders } from '../services/ticketsService'
 import { TOrder } from '../types/Order'
 import useEvents from '../hooks/useEvents'
 import { useNavigate } from "react-router-dom";
-import { MOCKED_ORDERS } from '../data-mockups/orderMockup'
 import { TEvents } from '../types/ticket'
 
 const OrderHistory = () => {
   const navigate = useNavigate();
   const eventsContext = useEvents();
-  const { setCurrentOrder, currentEvent, setCurrentEvent, events } = eventsContext;
-  const [orders, setOrders] = useState<any>();
+  const { setCurrentOrder, setCurrentEvent, events } = eventsContext;
+  const [orders, setOrders] = useState<Array<TOrder>>();
 
   const fetchOrders = async () => {
-
-    Promise.resolve(getOrders())
-      .then((fetchedOrders) => {
-        setOrders(fetchedOrders);
-      })
-    // setOrders(MOCKED_ORDERS)
+    setOrders(await getOrders());
   }
 
   useEffect(() => {
@@ -27,9 +21,8 @@ const OrderHistory = () => {
   }, [])
 
   const handleClick = (order: TOrder) => {
-    // setOrderID(order.id);
     setCurrentOrder(order);
-    setCurrentEvent(events.find((event:TEvents)=> event.id === order.eventId));
+    setCurrentEvent(events.find((event: TEvents) => event.id === order.eventId));
     navigate('/admin/ticket-summary');
   }
 
