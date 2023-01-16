@@ -1,5 +1,5 @@
 import { Box, Heading, Stack, Spinner, Button, HStack } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useEvents from "../hooks/useEvents";
 import { getOrder, getTicketsByOrder } from '../services/ticketsService'
 import { IconBrandWhatsapp, IconMail } from '@tabler/icons';
@@ -13,22 +13,23 @@ const QRGenerator = () => {
   const eventsContext = useEvents();
   const { pruchasedTickets, setPruchasedTickets, currentOrder, setCurrentOrder, events } = eventsContext;
   const { orderID } = useParams();
+  const [isLoading, setisLoading] = useState(true);
 
-  const fetchOrder = async () => {
+  const fetchData = async () => {
     setCurrentOrder(await getOrder(orderID));
+    setPruchasedTickets(await getTicketsByOrder(orderID));
+    setisLoading(false);
   }
 
-  const fetchTickets = async () => {
-    setPruchasedTickets(await getTicketsByOrder(orderID));
+  const cleanData = async () => {
+    setPruchasedTickets(undefined);
+    setCurrentOrder(undefined);
   }
 
   useEffect(() => {
-    if (isLoading) {
-      fetchOrder();
-      fetchTickets();
-    }
+    cleanData();
+    fetchData();
   }, []);
-
 
   const buildWhatsAppLink = () => {
     if (currentOrder) {
@@ -52,8 +53,6 @@ const QRGenerator = () => {
       return serviceURL
     }
   }
-
-  const isLoading = !pruchasedTickets && !currentOrder;
 
   return (
     <>

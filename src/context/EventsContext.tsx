@@ -21,15 +21,14 @@ const EventsProvider = ({ children }: props) => {
     setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
   }
   const fetchEvents = async () => {
-    Promise.resolve(getEvents())
-      .then((fetchEvents) => {
-        setEvents(fetchEvents);
-      })
-      .finally(() => setIsLoading(false))
-      .catch((err) => console.log(err)
-      );
+    try {
+      setEvents(await getEvents());
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false)
+    }
   };
-
   const postNewEvents = async () => {
     await postEvents();
   }

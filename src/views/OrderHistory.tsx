@@ -23,7 +23,7 @@ const OrderHistory = () => {
   const handleClick = (order: TOrder) => {
     setCurrentOrder(order);
     setCurrentEvent(events.find((event: TEvents) => event.id === order.eventId));
-    navigate('/admin/ticket-summary');
+    navigate(`/admin/ticket-summary/${order.id}`);
   }
 
   return (
