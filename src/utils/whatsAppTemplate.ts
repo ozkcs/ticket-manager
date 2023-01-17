@@ -1,5 +1,5 @@
 
-export const sendLinkQRCodes = (first_name: string, eventName: string, date: string, place: string, ticketQuantities: number, total: number, typeOfTicket: string) => {
+export const sendLinkQRCodes = (first_name: string, eventName: string, date: string, place: string, ticketQuantities: number, total: number, typeOfTicket: string, orderId:string) => {
 
   const name = first_name && first_name.replace(first_name.charAt(0), first_name.charAt(0).toUpperCase())
   const moreThanOneTicket = ticketQuantities > 1 && 's'
@@ -14,7 +14,8 @@ export const sendLinkQRCodes = (first_name: string, eventName: string, date: str
     • Cantidad de tiquetes: ${ticketQuantities} _(${typeOfTicket})_
     • Total: ${total} colones
 
-  En el siguiente link 👉 https://www.hermosasoftware.io/ encontrarás tus tiquetes los cuáles deben ser descargados para ser usados el dia del Evento como entrada.
+  En el siguiente link 👉 https://localhost:3000/order/${orderId}/  encontrarás tus tiquetes los cuáles debes presentar a la entrada el dia del evento.
   `
+  //TODO: Change for env variable for security
   return encodeURIComponent(template)
 } 

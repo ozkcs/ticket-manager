@@ -1,17 +1,24 @@
-import { collection, doc, getDoc, addDoc, getDocs } from "@firebase/firestore";
+import { collection, doc, getDoc, addDoc, getDocs, query } from "@firebase/firestore";
 import { db } from "./firebaseService";
 import dayjs from "dayjs";
 import { async } from "@firebase/util";
+import { TEvents } from "../types/ticket";
 
 const eventsCollectionRef = collection(db, "events");
 
-export const getEvents = async () => {
+export const getEvents = async () :Promise<Array<TEvents> | undefined>=> {
 	try {
-		const data = await getDocs(eventsCollectionRef);
-		data.docs.length && data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    // const eventQuery = query(eventsCollectionRef)
+		const fetchedEvents = await getDocs(eventsCollectionRef);
+    return await buildEvents(fetchedEvents);
+		
 	} catch (e) {
 		console.log(e)
 	}
+};
+
+const buildEvents = async ( events: any ): Promise<Array<TEvents> | undefined> => {
+	return await events.docs.map((event: any) => ({ ...event.data(), id: event.id }));
 };
 
 

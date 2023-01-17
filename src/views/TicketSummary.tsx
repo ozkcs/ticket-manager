@@ -1,49 +1,57 @@
-import { Box, Heading, Stack, Spinner, SimpleGrid, Button, HStack } from '@chakra-ui/react';
+import { Box, Heading, Stack, Spinner, Button, HStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import useEvents from "../hooks/useEvents";
-import { getTicketsByOrder } from '../services/ticketsService'
+import { getOrder, getTicketsByOrder } from '../services/ticketsService'
 import { IconBrandWhatsapp, IconMail } from '@tabler/icons';
-import Ticket from '../components/Ticket';
-import { TEvents, TTicket, TTicketType } from '../types/ticket';
+import { TEvents, TTicketType } from '../types/ticket';
 import EventBanner from '../components/EventBanner';
 import TicketGrid from '../components/TicketGrid';
-import { MOCKED_SOLD_TICKETS } from '../data-mockups/sold_ticketMockup';
 import { sendLinkQRCodes } from '../utils/whatsAppTemplate';
+import { useParams } from 'react-router-dom';
 
 const QRGenerator = () => {
   const eventsContext = useEvents();
-  const { orderID, pruchasedTickets, setPruchasedTickets, currentOrder } = eventsContext;
-  const [isLoading, setIsLoading] = useState(true);
+  const { pruchasedTickets, setPruchasedTickets, currentOrder, setCurrentOrder, events } = eventsContext;
+  const { orderID } = useParams();
+  const [isLoading, setisLoading] = useState(true);
+
+  const fetchData = async () => {
+    setCurrentOrder(await getOrder(orderID));
+    setPruchasedTickets(await getTicketsByOrder(orderID));
+    setisLoading(false);
+  }
+
+  const cleanData = async () => {
+    setPruchasedTickets(undefined);
+    setCurrentOrder(undefined);
+  }
 
   useEffect(() => {
-    if (isLoading) {
-      // COMMENTED DUE TO MOCKED DATA
-      // Promise.resolve(getTicketsByOrder(orderID))
-      //   .then((fetchedTickets) => {
-      //     setPruchasedTickets(fetchedTickets);
-      //   }).finally(() => {
-      //     setIsLoading(false)
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     //TODO: Handle Error
-      //   });
-      setPruchasedTickets(MOCKED_SOLD_TICKETS.filter((ticket: TTicket) => ticket.order === orderID));
-      setIsLoading(false);
-    }
+    cleanData();
+    fetchData();
   }, []);
 
   const buildWhatsAppLink = () => {
-    const typeOfTicket = pruchasedTickets && pruchasedTickets[0]?.type
-    const ticketsQuantities = pruchasedTickets && pruchasedTickets.length
-    // for this 👇 case we can retrieve the data byId and pre-populate the information
-    const { name, location, ticketTypes } = eventsContext.events.filter((item: TEvents) => item.eventId === +currentOrder.eventId)[0]
-    const total = ticketTypes.filter((item: TTicketType) => item.name === typeOfTicket)[0]?.price * ticketsQuantities
+    if (currentOrder) {
+      const typeOfTicket = pruchasedTickets && pruchasedTickets[0]?.type
+      const ticketsQuantities = pruchasedTickets && pruchasedTickets?.length
+      // for this 👇 case we can retrieve the data byId and pre-populate the information
+      const { name, location, ticketTypes } = events.find((event: TEvents) => event.id === currentOrder?.eventId)
+      const total = ticketTypes?.filter((item: TTicketType) => item.name === typeOfTicket)[0]?.price * ticketsQuantities
 
-    const messageTemplate = sendLinkQRCodes(currentOrder?.first_name, name, '4 de Julio', location, ticketsQuantities, total, typeOfTicket)
-    const userPhoneNumber = `506${currentOrder?.phone}`
-    const serviceURL = `https://api.whatsapp.com/send?phone=${userPhoneNumber}&text=${messageTemplate}`
-    return serviceURL
+      const messageTemplate = sendLinkQRCodes(
+        currentOrder?.first_name,
+        name,
+        '4 de Julio',
+        location,
+        ticketsQuantities,
+        total,
+        typeOfTicket,
+        currentOrder.id)
+      const userPhoneNumber = `${currentOrder?.phone}`
+      const serviceURL = `https://api.whatsapp.com/send?phone=${userPhoneNumber}&text=${messageTemplate}`
+      return serviceURL
+    }
   }
 
   return (
@@ -60,7 +68,7 @@ const QRGenerator = () => {
           </HStack>
           {isLoading
             ? <Spinner />
-            : <TicketGrid orderID={orderID} tickets={pruchasedTickets} />
+            : <TicketGrid order={currentOrder} tickets={pruchasedTickets} />
           }
         </Stack>
       </Box>

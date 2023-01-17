@@ -1,9 +1,8 @@
 
-import { createContext, useCallback, useMemo, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 import { getEvents, postEvents } from "../services/eventsService";
-import { interactivity } from '@chakra-ui/react';
 import { TOrder } from '../types/Order';
-import { MOCKED_EVENTS } from '../data-mockups/eventMockup';
+import { TTicket } from '../types/ticket';
 
 const EventsContext = createContext<any>(null);
 interface props {
@@ -14,21 +13,22 @@ const EventsProvider = ({ children }: props) => {
   const [currentEvent, setCurrentEvent] = useState<any>();
   const [events, setEvents] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [orderID, setOrderID] = useState<string>();
-  const [currentOrder, setCurrentOrder] = useState<TOrder>()
-  const [pruchasedTickets, setPruchasedTickets] = useState();
+  const [currentOrder, setCurrentOrder] = useState<TOrder | undefined>()
+  const [pruchasedTickets, setPruchasedTickets] = useState<Array<TTicket> | undefined>();
   const { aquiredTickets } = currentEvent || [null];
 
   const setAquiredTickets = (temp: any) => {
     setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
   }
-  const fetchEvents = useCallback(async () => {
-    const fetchedEvents = await getEvents();
-    setEvents(fetchedEvents);
-
-    setIsLoading(false);
-  }, []);
-
+  const fetchEvents = async () => {
+    try {
+      setEvents(await getEvents());
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false)
+    }
+  };
   const postNewEvents = async () => {
     await postEvents();
   }
@@ -51,7 +51,7 @@ const EventsProvider = ({ children }: props) => {
         currentEvent, setCurrentEvent,
         events, setEvents,
         isLoading, setIsLoading,
-        orderID, setOrderID,
+        // orderID, setOrderID,
         currentOrder, setCurrentOrder,
         pruchasedTickets, setPruchasedTickets,
         aquiredTickets, setAquiredTickets,

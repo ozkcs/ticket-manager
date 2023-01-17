@@ -10,6 +10,7 @@ import {
 } from "@firebase/firestore";
 import { db } from "./firebaseService";
 import { TTicket } from "../types/ticket";
+import { TOrder } from "../types/Order";
 
 const ticketCollection = collection(db, "sold_tickets");
 const ordersCollection = collection(db, "user_orders");
@@ -52,23 +53,41 @@ const saveTicket = (ticket: any, userOrderID: string) => {
 	});
 };
 
-export const getOrders = async () => {
+export const getOrders = async (): Promise<Array<TOrder> | undefined> => {
 	const data = await getDocs(ordersCollection);
-	return await data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+	const buildedOrders = await data.docs.map((doc: any) => ({
+		...doc.data(),
+		id: doc.id,
+	}));
+	return buildedOrders;
 };
 
-export const getTicketsByOrder = async ( orderId: string ): Promise<Array<TTicket> | undefined> => {
-	const getTicketsByOrderId = query(ticketCollection,where("order", "==", orderId));
-	const data = await getDocs(getTicketsByOrderId);
-	const buildedTickets = await buildTickets(data.docs);
-	return buildedTickets;
+export const getTicketsByOrder = async (
+	orderId: string | undefined
+): Promise<Array<TTicket> | undefined> => {
+	if (orderId) {
+		const getTicketsByOrderId = query(
+			ticketCollection,
+			where("order", "==", orderId)
+		);
+		const data = await getDocs(getTicketsByOrderId);
+		const buildedTickets = await buildTickets(data.docs);
+		return buildedTickets;
+	}
 };
 
-const buildTickets = async ( tickets: any ): Promise<Array<TTicket> | undefined> => {
-	return await tickets.map((ticket: any) => ({ ...ticket.data(), id: ticket.id }));
+const buildTickets = async (
+	tickets: any
+): Promise<Array<TTicket> | undefined> => {
+	return await tickets.map((ticket: any) => ({
+		...ticket.data(),
+		id: ticket.id,
+	}));
 };
 
-export const markTicketAsUsed = async ( id: string ): Promise<TTicket | undefined> => {
+export const markTicketAsUsed = async (
+	id: string
+): Promise<TTicket | undefined> => {
 	const ticketRef = doc(db, "sold_tickets", id);
 	await setDoc(ticketRef, { validated: true }, { merge: true });
 	const ticketUpdated = await getDoc(ticketRef);
@@ -80,4 +99,21 @@ const buildTicket = async (ticket: any): Promise<TTicket | undefined> => {
 		...ticket.data(),
 		id: ticket.id,
 	};
+};
+
+export const getOrder = async (
+	id: string | undefined
+): Promise<TOrder | undefined> => {
+	if (id) {
+		const orderRef = doc(db, "user_orders", id);
+		const order = await getDoc(orderRef);
+		return {
+			id: order.id,
+			email: order.data()?.email,
+			eventId: order.data()?.eventId,
+			first_name: order.data()?.first_name,
+			last_name: order.data()?.last_name,
+			phone: order.data()?.phone,
+		};
+	}
 };

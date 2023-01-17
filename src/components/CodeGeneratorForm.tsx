@@ -25,13 +25,14 @@ const CodeGeneratorForm = () => {
       phone: Yup.string().required("This field is required"),
     }),
     onSubmit: async (values: any, actions: any) => {
-      const orderId = await buyTickets(values, currentEvent);
-      if (orderId) {
-        eventsContext.setOrderID(orderId);
-        actions.resetForm();
-        navigate("/ticket-summary");
+      const order = await buyTickets(values, currentEvent);
+      if (order) {
+        navigate(`/admin/ticket-summary/${order}`);
+      } else {
+        //TODO: handle not submiting
       }
     }
+
   })
 
   return (

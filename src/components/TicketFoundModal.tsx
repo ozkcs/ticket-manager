@@ -1,8 +1,10 @@
 import { Button, Center, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Ticket from "./Ticket";
-import { TTicket } from "../types/ticket";
-import { getTicketsByOrder, markTicketAsUsed } from "../services/ticketsService";
+import { TEvents, TTicket } from "../types/ticket";
+import { getTicketsByOrder, markTicketAsUsed, getOrders } from "../services/ticketsService";
+import { TOrder } from "../types/Order";
+import useEvents from "../hooks/useEvents";
 
 interface ITicketFoundModal {
   qrData: string
@@ -13,12 +15,22 @@ const empty_ticket = {
   order: '',
   type: ''
 }
+const empty_order = {
+  id: '',
+  email: '',
+  eventId: '',
+  first_name: '',
+  last_name: '',
+  phone: '',
+}
 const TicketFoundModal = ({ qrData, setQrData }: ITicketFoundModal) => {
+  const eventsContext = useEvents();
+  const { currentEvent, setCurrentEvent, events } = eventsContext;
   const { onOpen, isOpen, onClose } = useDisclosure();
 
   const [ticketFound, setTicketFound] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [orderID, setOrderID] = useState<string>('');
+  const [order, setOrder] = useState<TOrder>(empty_order);
   const [ticket, setTicket] = useState<TTicket>(empty_ticket);
 
   const spanToast = useToast();
@@ -42,27 +54,37 @@ const TicketFoundModal = ({ qrData, setQrData }: ITicketFoundModal) => {
   }
 
   const searchTicket = async (orderId: string, ticketId: string) => {
-    Promise.resolve(getTicketsByOrder(orderId))
-      .then((fetchedTickets) => {
-        if (fetchedTickets) {
-          const temp_ticket = fetchedTickets.find((ticket: TTicket) => ticket.id === ticketId && ticket.order === orderId);
-          if (temp_ticket) {
-            setOrderID(orderId);
-            setTicket(temp_ticket);
-            setTicketFound(true);
-          }
+    Promise.resolve(getOrders())
+      .then((fetchedOrders) => {
+        if (fetchedOrders) {
+          const temp_order = fetchedOrders.find((order: TOrder) => order.id === orderId);
+          temp_order && setOrder(temp_order);
+          setCurrentEvent(events.find((event: TEvents) => event.id === order.eventId))
         }
-      }).finally(() => {
-        setIsLoading(false);
       })
-      .catch((err) => {
-        spanCodeScannError();
-      });
+    if (order) {
+      Promise.resolve(getTicketsByOrder(orderId))
+        .then((fetchedTickets) => {
+          if (fetchedTickets) {
+            const temp_ticket = fetchedTickets.find((ticket: TTicket) => ticket.id === ticketId && ticket.order === orderId);
+            if (temp_ticket) {
+              // setOrderID(orderId);
+              setTicket(temp_ticket);
+              setTicketFound(true);
+            }
+          }
+        }).finally(() => {
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          spanCodeScannError();
+        });
+    }
   }
 
   const handleClose = () => {
     setQrData('');
-    setOrderID('');
+    // setOrderID('');
     setTicket(empty_ticket);
     onClose();
   }
@@ -112,7 +134,7 @@ const TicketFoundModal = ({ qrData, setQrData }: ITicketFoundModal) => {
             : (ticketFound
               ? <>
                 <ModalBody pb={6}>
-                  <Ticket orderID={orderID} ticket={ticket} isDownloadable={false} />
+                  <Ticket order={order} ticket={ticket} event={currentEvent} isDownloadable={false} />
                 </ModalBody>
                 <ModalFooter justifyContent={'space-between'}>
                   <Button onClick={handleClose}>Cancel</Button>

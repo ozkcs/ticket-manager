@@ -19,7 +19,7 @@ const Navigation = ({ currentView, setCurrentView, handleNavigate }: INavigate) 
     // eventsContext.postNewEvents(); //uncomment if need to post a new event
     const currentPath = location.pathname.split('/')
     setCurrentView(currentPath[2]);
-  });
+  },[]);
 
   return (
     <Flex w={'100vw'} maxW={'100%'} alignItems='center' gap='2' justifyContent="space-between" padding="2" direction={'row'} >

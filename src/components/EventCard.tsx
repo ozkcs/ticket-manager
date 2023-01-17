@@ -31,8 +31,8 @@ const EventCard = ({ event, index }: props) => {
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                   {'Start:'} </Text>
                 <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {/* {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')}  */}
-                  {event?.dates[0]} 
+                  {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} 
+                  {/* {event?.dates[0]}  */}
                   </Text>
               </Stack>
               <Spacer />
@@ -40,8 +40,8 @@ const EventCard = ({ event, index }: props) => {
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                   {'End:'} </Text>
                 <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {/* {dayjs(event?.dates[1].toDate()).format('DD MMMM YYYY')}  */}
-                  {event?.dates[1]} 
+                  {dayjs(event?.dates[1].toDate()).format('DD MMMM YYYY')} 
+                  {/* {event?.dates[1]}  */}
                   </Text>
               </Stack>
             </>)
@@ -50,8 +50,8 @@ const EventCard = ({ event, index }: props) => {
               <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                 {'Date:'} </Text>
               <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                {/* {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')}  */}
-                {event?.dates[0]} 
+                {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} 
+                {/* {event?.dates[0]}  */}
                 </Text>
             </Stack>)
           }

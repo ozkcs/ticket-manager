@@ -1,18 +1,21 @@
-import { Box, Button, Checkbox, Divider, Flex, HStack, Text, VStack, useColorModeValue } from '@chakra-ui/react'
-import React, { RefObject, useRef, useState } from 'react'
+import { Box, Button, Divider, Flex, HStack, Text, VStack, useColorModeValue } from '@chakra-ui/react'
+import { RefObject, useRef, useState } from 'react'
 import QRCode from './QRCode'
-import { TTicket } from '../types/ticket'
+import { TEvents, TTicket } from '../types/ticket'
 import { useSize } from "@chakra-ui/react-use-size"
 import { IconDownload } from '@tabler/icons'
 import html2canvas from 'html2canvas';
+import { TOrder } from '../types/Order'
+import dayjs from 'dayjs';
 
 interface ITicket {
-  orderID: string | undefined,
+  order: TOrder
   ticket: TTicket
+  event: TEvents
   isDownloadable?: boolean | true
 }
 
-const Ticket = ({ orderID, ticket, isDownloadable }: ITicket) => {
+const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
   const ticketRef = useRef() as RefObject<any>
   const emptyBoxRef = useRef() as RefObject<HTMLDivElement>
   const emptyBoxDim = useSize(emptyBoxRef)
@@ -39,6 +42,7 @@ const Ticket = ({ orderID, ticket, isDownloadable }: ITicket) => {
     await setIsDownloading(false)
   };
   const bgCardColor = useColorModeValue('gray.50', 'whiteAlpha.200');
+
   return (
     <VStack  >
       <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4} borderRadius={10}>
@@ -58,40 +62,46 @@ const Ticket = ({ orderID, ticket, isDownloadable }: ITicket) => {
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} >
                   Evento:</Text>
                 <Text as='sub' fontSize='lg' color='gray.400' >
-                  Nombre el Evento </Text>
+                  {event?.name} </Text>
+              </VStack>
+              <VStack spacing={6} alignItems={'baseline'}>
+                <Text as='sub' fontSize='lg' fontWeight={'bold'} >
+                  Lugar:</Text>
+                <Text as='sub' fontSize='lg' color='gray.400' >
+                  {event?.location} </Text>
               </VStack>
               <VStack spacing={6} alignItems={'baseline'}>
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                   Fecha:</Text>
                 <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  Enero 1 2023 - Enero 2 2023</Text>
+                  {dayjs(event?.dates[0].toDate()).format('MMM DD YYYY')}</Text>
               </VStack>
             </VStack>
           </HStack>
           <Divider />
           <Flex>
-            <QRCode orderID={orderID} ticket={ticket} />
+            <QRCode orderID={order.id} ticket={ticket} />
           </Flex>
           <Divider />
           <HStack spacing={1} alignItems={'baseline'}>
             <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
               Email: </Text>
             <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
-              longmailuserexample@email.com  </Text>
+              {order.email} </Text>
           </HStack>
           <HStack justifyContent={'space-evenly'} w={'100%'} >
             <HStack spacing={1} alignItems={'baseline'}>
               <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                 Nombre: </Text>
               <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
-                User Example  </Text>
+                {order.first_name + ' ' + order.last_name}  </Text>
             </HStack>
 
             <HStack spacing={1} alignItems={'baseline'}>
               <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                 Tel: </Text>
               <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
-                +50680808080  </Text>
+                {order.phone} </Text>
             </HStack>
           </HStack>
           <HStack spacing={1} display={'block'}>
@@ -99,9 +109,7 @@ const Ticket = ({ orderID, ticket, isDownloadable }: ITicket) => {
               Officialmente Generado por TicketManager ©</Text>
           </HStack>
         </VStack>
-
       </Box>
-
     </VStack>
   )
 }
