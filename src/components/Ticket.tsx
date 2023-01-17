@@ -1,9 +1,8 @@
-import { Box, Button, Divider, Flex, HStack, Text, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, HStack, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 import { RefObject, useRef, useState } from 'react'
 import QRCode from './QRCode'
 import { TEvents, TTicket } from '../types/ticket'
-import { useSize } from "@chakra-ui/react-use-size"
-import { IconDownload } from '@tabler/icons'
+import { IconDownload, IconPhoto } from '@tabler/icons'
 import html2canvas from 'html2canvas';
 import { TOrder } from '../types/Order'
 import dayjs from 'dayjs';
@@ -17,8 +16,6 @@ interface ITicket {
 
 const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
   const ticketRef = useRef() as RefObject<any>
-  const emptyBoxRef = useRef() as RefObject<HTMLDivElement>
-  const emptyBoxDim = useSize(emptyBoxRef)
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
   const handleDownload = async () => {
@@ -47,35 +44,27 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
     <VStack  >
       <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4} borderRadius={10}>
         <VStack width={['400px', '500px', '500px']} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
-          <VStack gap={6} w={'100%'} alignItems={'end'}>
+          <HStack gap={6} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
+            <Heading size={'lg'}>{event?.name}</Heading>
             <Button hidden={isDownloading || !isDownloadable} onClick={handleDownload} gap={2} ><IconDownload />Descargar</Button>
-          </VStack>
-          <HStack width={'100%'}>
-            <VStack ml={4} mr={4}>
-              <Box ref={emptyBoxRef} minWidth='25%' minH={emptyBoxDim?.width} borderRadius='10' borderWidth='3px' borderColor={'teal.200'}
-                display={'flex'} alignContent={'center'} justifyContent={'center'} >
-                Imagen del evento
-              </Box>
+          </HStack>
+          <HStack width={'100%'} alignItems={'center'}>
+            <VStack maxWidth='25%'>
+              <IconPhoto size='100%' />
             </VStack>
             <VStack gap={4} alignItems={'baseline'} maxW={'70%'} justifyContent={'space-evenly'} h={'100%'}>
-              <VStack spacing={6} alignItems={'baseline'}>
-                <Text as='sub' fontSize='lg' fontWeight={'bold'} >
-                  Evento:</Text>
-                <Text as='sub' fontSize='lg' color='gray.400' >
-                  {event?.name} </Text>
-              </VStack>
-              <VStack spacing={6} alignItems={'baseline'}>
+              <HStack spacing={2} alignItems={'baseline'}>
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} >
                   Lugar:</Text>
                 <Text as='sub' fontSize='lg' color='gray.400' >
                   {event?.location} </Text>
-              </VStack>
-              <VStack spacing={6} alignItems={'baseline'}>
+              </HStack>
+              <HStack spacing={2} alignItems={'baseline'}>
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                   Fecha:</Text>
                 <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
                   {dayjs(event?.dates[0].toDate()).format('MMM DD YYYY')}</Text>
-              </VStack>
+              </HStack>
             </VStack>
           </HStack>
           <Divider />
@@ -106,7 +95,7 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
           </HStack>
           <HStack spacing={1} display={'block'}>
             <Text as='sub' fontStyle={'italic'} fontSize='sm' fontWeight={'bold'} wordBreak={'keep-all'}>
-              Officialmente Generado por TicketManager ©</Text>
+              Oficialmente Generado por TicketManager ©</Text>
           </HStack>
         </VStack>
       </Box>

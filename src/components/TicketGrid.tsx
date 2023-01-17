@@ -11,8 +11,8 @@ interface ITicketGrid {
 
 const TicketGrid = ({ order, tickets }: ITicketGrid) => {
   const eventsContext = useEvents();
-  const { events } = eventsContext;
-  const event = events.find((event: TEvents) => event.id === order?.eventId);
+  const { events, setCurrentEvent, currentEvent } = eventsContext;
+  setCurrentEvent( events.find((event: TEvents) => event.id === order?.eventId));
 
   return (
     <Stack w={'100%'} alignItems={'center'}>
@@ -28,8 +28,8 @@ const TicketGrid = ({ order, tickets }: ITicketGrid) => {
             : 'repeat(3, 1fr)'
         }}
         gap={8} alignItems={'center'}>
-        {event && tickets?.map((ticket: TTicket) =>
-          <Ticket order={order} ticket={ticket} event={event} isDownloadable />
+        {currentEvent && tickets?.map((ticket: TTicket) =>
+          <Ticket order={order} ticket={ticket} event={currentEvent} isDownloadable />
         )}
       </SimpleGrid>
     </Stack >)
