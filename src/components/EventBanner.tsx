@@ -1,7 +1,8 @@
 import { Box, Stack, Text, Heading, Spacer, } from "@chakra-ui/react";
-import dayjs from 'dayjs';
 import useEvents from '../hooks/useEvents';
 import { titleTextSize, subtitleTextSize, nomralTextSize } from "../utils/ResponsiveStyles";
+import { parseStringToDate, parseStringToHour } from "../utils/dateHelper";
+
 const EventBanner = () => {
   const eventsContext = useEvents();
   const { currentEvent } = eventsContext;
@@ -20,18 +21,19 @@ const EventBanner = () => {
           <Stack spacing={3} >
             <Stack direction='row' spacing={2} flexWrap='nowrap'>
               <Text as='sub' fontSize={nomralTextSize} fontWeight={'bold'} wordBreak={'keep-all'}>
-                {'Start Day:'} </Text>
+                {'Date:'} </Text>
               <Spacer />
               <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'}>
-                {dayjs(currentEvent?.dates[0].toDate()).format('DD MMMM YYYY')}</Text>
+                {parseStringToDate(currentEvent?.date)}
+              </Text>
             </Stack>
             <Spacer />
             <Stack width={'100%'} direction='row' spacing={2} flexWrap='nowrap'>
               <Text as='sub' fontSize={nomralTextSize} fontWeight={'bold'} wordBreak={'keep-all'}>
-                {'End Day:'} </Text>
+                {'Hour:'} </Text>
               <Spacer />
               <Text as='sub' fontSize={nomralTextSize} color='gray.400' wordBreak={'keep-all'} textAlign='right'>
-                {dayjs(currentEvent?.dates[currentEvent?.dates?.length - 1]?.toDate()).format('DD MMMM YYYY')}
+                {parseStringToHour(currentEvent?.date)}
               </Text>
             </Stack>
           </Stack>
@@ -40,7 +42,7 @@ const EventBanner = () => {
         <Stack>
           <Heading size={titleTextSize} as='h2' >No event selected</Heading>
         </Stack>}
-    </Box>
+    </Box >
   )
 }
 

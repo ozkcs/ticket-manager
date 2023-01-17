@@ -1,61 +1,50 @@
-import { Box, Stack, Text, Heading, Spacer, useColorModeValue } from "@chakra-ui/react";
+import { Box, Stack, Heading, useColorModeValue, HStack, Tag, Image } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import dayjs from 'dayjs';
 import useEvents from "../hooks/useEvents";
+import { parseStringToDate, parseStringToHour } from "../utils/dateHelper";
+
 interface props {
   event?: any;
-  index?: any;
+  count?: number;
 }
-const EventCard = ({ event, index }: props) => {
+
+const EventCard = ({ event, count }: props) => {
   const navigate = useNavigate();
   const eventsContext = useEvents();
   const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-
+  const bgCardColor = useColorModeValue('gray.50', 'whiteAlpha.200');
   const handleOnClick = () => {
     eventsContext.setCurrentEvent(event);
     navigate('generate-code');
   }
+  const images = [
+    "./Blaiz.jpg",
+    "./pole.jpg",
+  ]
 
   return (
-    <Box as="button" maxWidth='500px' minWidth='450px' borderRadius='10' borderWidth='3px' borderColor={'teal.200'} p='4' onClick={handleOnClick} _hover={{ bg: hoverColor }}>
-      <Box maxWidth='100%' minWidth='50%' minHeight={'200px'} borderRadius='10' borderWidth='3px' borderColor={'teal.200'} >
-      </Box>
-      <Stack spacing={7}>
-        <Heading size='lg' as='h2' >
+    <Box as="button" maxWidth='500px' minWidth='450px' borderRadius='10'
+      bgColor={hoverColor}
+      p='4' onClick={handleOnClick}
+      _hover={{ bg: bgCardColor, boxShadow: "2xl" }}>
+      <Stack>
+        <Heading size='lg' as='h2' textAlign={'start'}>
           {event?.name}
         </Heading >
-        <Stack direction='row' justifyContent={'center'}>
-          {event?.dates[0].leght > 1 ?
-            (<>
-              <Stack direction='row' spacing={1} flexWrap='nowrap'>
-                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                  {'Start:'} </Text>
-                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} 
-                  {/* {event?.dates[0]}  */}
-                  </Text>
-              </Stack>
-              <Spacer />
-              <Stack direction='row' spacing={1} flexWrap='nowrap'>
-                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                  {'End:'} </Text>
-                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {dayjs(event?.dates[1].toDate()).format('DD MMMM YYYY')} 
-                  {/* {event?.dates[1]}  */}
-                  </Text>
-              </Stack>
-            </>)
-            :
-            (<Stack direction='row' spacing={1} flexWrap='nowrap'>
-              <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                {'Date:'} </Text>
-              <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                {dayjs(event?.dates[0].toDate()).format('DD MMMM YYYY')} 
-                {/* {event?.dates[0]}  */}
-                </Text>
-            </Stack>)
-          }
-        </Stack>
+        {count !== undefined &&
+          <Image src={images[count]}
+            borderRadius={'10'}
+            objectFit={'cover'}
+            maxWidth='100%' maxH={'500px'} />
+        }
+        <HStack mt={4} >
+          <Tag colorScheme={'teal'}>
+            {parseStringToDate(event?.date)}
+          </Tag>
+          <Tag colorScheme={'teal'}>
+            {parseStringToHour(event?.date)}
+          </Tag>
+        </HStack>
       </Stack>
     </Box>
   )

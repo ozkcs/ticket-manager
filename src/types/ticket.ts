@@ -12,7 +12,7 @@ export type TTicketType = {
 }
 
 export type TEvents = {
-  dates: Array<any>
+  date: any
   id: string
   location: string
   name: string

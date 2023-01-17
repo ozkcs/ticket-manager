@@ -6,7 +6,7 @@ const EventGallery = () => {
   const eventsContext = useEvents();
 
   return (
-    <Stack alignItems={'center'} spacing={10}>
+    <Stack alignItems={'center'} spacing={10} mb={10}>
       <Heading size='4xl' as='h2' textAlign='center'>
         UPCOMING EVENTS
       </Heading >
@@ -21,8 +21,8 @@ const EventGallery = () => {
               : 'repeat(3, 1fr)'
           }}
           gap={10} >
-          {eventsContext.events?.map((event: any, index: any) => {
-            return (<EventCard event={event} index={index} key={index} />)
+          {eventsContext.events?.map((event: any, index: number) => {
+            return (<EventCard event={event} key={index} count={index} />)
           })}
         </SimpleGrid>
       }

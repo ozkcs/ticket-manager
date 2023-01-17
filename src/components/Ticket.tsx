@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, HStack, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, HStack, Heading, Image, Img, Spinner, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 import { RefObject, useRef, useState } from 'react'
 import QRCode from './QRCode'
 import { TEvents, TTicket } from '../types/ticket'
@@ -6,7 +6,7 @@ import { IconDownload, IconPhoto } from '@tabler/icons'
 import html2canvas from 'html2canvas';
 import { TOrder } from '../types/Order'
 import dayjs from 'dayjs';
-
+import { parseStringToDate, parseStringToHour } from '../utils/dateHelper'
 interface ITicket {
   order: TOrder
   ticket: TTicket
@@ -39,20 +39,33 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
     await setIsDownloading(false)
   };
   const bgCardColor = useColorModeValue('gray.50', 'whiteAlpha.200');
+  const useIndex = event?.id === "EfVWwp5uKuxmXr1TbKgt" ? 0 : 1;
+  const images = [
+    "../../Blaiz.jpg",
+    "../../pole.jpg",
+  ]
 
   return (
     <VStack  >
       <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4} borderRadius={10}>
+
         <VStack width={['400px', '500px', '500px']} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
           <HStack gap={6} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
             <Heading size={'lg'}>{event?.name}</Heading>
             <Button hidden={isDownloading || !isDownloadable} onClick={handleDownload} gap={2} ><IconDownload />Descargar</Button>
           </HStack>
-          <HStack width={'100%'} alignItems={'center'}>
-            <VStack maxWidth='25%'>
-              <IconPhoto size='100%' />
+
+          <HStack gap={4} width={'100%'} alignItems={'center'} justifyContent={'flex-start'}>
+            <VStack >
+              <Img src={images[useIndex]}
+                borderRadius={'10'}
+                objectFit={'cover'}
+                __css={{ aspectRatio: '4/4' }}
+                maxWidth='150px'
+                onError={(err) => console.log(err)} />
             </VStack>
-            <VStack gap={4} alignItems={'baseline'} maxW={'70%'} justifyContent={'space-evenly'} h={'100%'}>
+
+            <VStack gap={4} alignItems={'baseline'} justifyContent={'space-evenly'} h={'100%'}>
               <HStack spacing={2} alignItems={'baseline'}>
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} >
                   Lugar:</Text>
@@ -63,7 +76,13 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
                 <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                   Fecha:</Text>
                 <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {dayjs(event?.dates[0].toDate()).format('MMM DD YYYY')}</Text>
+                  {parseStringToDate(event?.date)}</Text>
+              </HStack>
+              <HStack spacing={2} alignItems={'baseline'}>
+                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
+                  Hora:</Text>
+                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
+                  {parseStringToHour(event?.date)}</Text>
               </HStack>
             </VStack>
           </HStack>
@@ -85,7 +104,6 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
               <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
                 {order.first_name + ' ' + order.last_name}  </Text>
             </HStack>
-
             <HStack spacing={1} alignItems={'baseline'}>
               <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
                 Tel: </Text>
