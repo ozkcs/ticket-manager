@@ -11,8 +11,8 @@ interface props {
 const EventCard = ({ event, count }: props) => {
   const navigate = useNavigate();
   const eventsContext = useEvents();
-  const hoverColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
-  const bgCardColor = useColorModeValue('gray.50', 'whiteAlpha.200');
+  const bgCardColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.100');
+  const hoverColor = useColorModeValue('gray.50', 'whiteAlpha.200');
   const handleOnClick = () => {
     eventsContext.setCurrentEvent(event);
     navigate('generate-code');
@@ -24,9 +24,9 @@ const EventCard = ({ event, count }: props) => {
 
   return (
     <Box as="button" maxWidth='500px' minWidth='450px' borderRadius='10'
-      bgColor={hoverColor}
+      bgColor={bgCardColor}
       p='4' onClick={handleOnClick}
-      _hover={{ bg: bgCardColor, boxShadow: "2xl" }}>
+      _hover={{ bg: hoverColor, boxShadow: "2xl" }}>
       <Stack>
         <Heading size='lg' as='h2' textAlign={'start'}>
           {event?.name}

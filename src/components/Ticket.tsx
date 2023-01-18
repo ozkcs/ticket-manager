@@ -1,12 +1,12 @@
-import { Box, Button, Divider, Flex, HStack, Heading, Image, Img, Spinner, Text, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, HStack, Heading, Img, Text, VStack, useColorModeValue } from '@chakra-ui/react'
 import { RefObject, useRef, useState } from 'react'
 import QRCode from './QRCode'
 import { TEvents, TTicket } from '../types/ticket'
-import { IconDownload, IconPhoto } from '@tabler/icons'
+import { IconDownload } from '@tabler/icons'
 import html2canvas from 'html2canvas';
 import { TOrder } from '../types/Order'
-import dayjs from 'dayjs';
 import { parseStringToDate, parseStringToHour } from '../utils/dateHelper'
+import LabeledText from './LabeledText'
 interface ITicket {
   order: TOrder
   ticket: TTicket
@@ -38,7 +38,7 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
     }
     await setIsDownloading(false)
   };
-  const bgCardColor = useColorModeValue('gray.50', 'whiteAlpha.200');
+  const bgCardColor = useColorModeValue('gray.100', 'whiteAlpha.200');
   const useIndex = event?.id === "EfVWwp5uKuxmXr1TbKgt" ? 0 : 1;
   const images = [
     "../../Blaiz.jpg",
@@ -52,9 +52,8 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
         <VStack width={['400px', '500px', '500px']} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
           <HStack gap={6} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
             <Heading size={'lg'}>{event?.name}</Heading>
-            <Button hidden={isDownloading || !isDownloadable} onClick={handleDownload} gap={2} ><IconDownload />Descargar</Button>
+            <Button hidden={isDownloading || !isDownloadable} onClick={handleDownload} gap={2} colorScheme={'teal'} ><IconDownload />Descargar</Button>
           </HStack>
-
           <HStack gap={4} width={'100%'} alignItems={'center'} justifyContent={'flex-start'}>
             <VStack >
               <Img src={images[useIndex]}
@@ -64,26 +63,10 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
                 maxWidth='150px'
                 onError={(err) => console.log(err)} />
             </VStack>
-
             <VStack gap={4} alignItems={'baseline'} justifyContent={'space-evenly'} h={'100%'}>
-              <HStack spacing={2} alignItems={'baseline'}>
-                <Text as='sub' fontSize='lg' fontWeight={'bold'} >
-                  Lugar:</Text>
-                <Text as='sub' fontSize='lg' color='gray.400' >
-                  {event?.location} </Text>
-              </HStack>
-              <HStack spacing={2} alignItems={'baseline'}>
-                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                  Fecha:</Text>
-                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {parseStringToDate(event?.date)}</Text>
-              </HStack>
-              <HStack spacing={2} alignItems={'baseline'}>
-                <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                  Hora:</Text>
-                <Text as='sub' fontSize='lg' color='gray.400' wordBreak={'keep-all'} >
-                  {parseStringToHour(event?.date)}</Text>
-              </HStack>
+              <LabeledText label='Lugar:' text={event?.location} />
+              <LabeledText label='Fecha:' text={parseStringToDate(event?.date)} />
+              <LabeledText label='Hora:' text={parseStringToHour(event?.date)} />
             </VStack>
           </HStack>
           <Divider />
@@ -92,27 +75,14 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
           </Flex>
           <Divider />
           <HStack spacing={1} alignItems={'baseline'}>
-            <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-              Email: </Text>
-            <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
-              {order.email} </Text>
+            <LabeledText label='Email:' text={order.email} />
           </HStack>
           <HStack justifyContent={'space-evenly'} w={'100%'} >
-            <HStack spacing={1} alignItems={'baseline'}>
-              <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                Nombre: </Text>
-              <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
-                {order.first_name + ' ' + order.last_name}  </Text>
-            </HStack>
-            <HStack spacing={1} alignItems={'baseline'}>
-              <Text as='sub' fontSize='lg' fontWeight={'bold'} wordBreak={'keep-all'}>
-                Tel: </Text>
-              <Text as='sub' fontSize='md' color='gray.400' wordBreak={'keep-all'} >
-                {order.phone} </Text>
-            </HStack>
+            <LabeledText label='Nombre:' text={order.first_name + ' ' + order.last_name} />
+            <LabeledText label='Tel:' text={order.phone} />
           </HStack>
           <HStack spacing={1} display={'block'}>
-            <Text as='sub' fontStyle={'italic'} fontSize='sm' fontWeight={'bold'} wordBreak={'keep-all'}>
+            <Text as='sub' fontStyle={'italic'} fontSize='sm' fontWeight={'bold'} variant={'primary'}>
               Oficialmente Generado por TicketManager ©</Text>
           </HStack>
         </VStack>

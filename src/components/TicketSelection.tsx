@@ -1,16 +1,16 @@
 import {
   Box, Button, Heading, Radio, RadioGroup, Spacer, Stack, Text,
-  Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer,
+  Table, Thead, Tbody, Tfoot, Tr, Th, TableContainer,
 } from '@chakra-ui/react'
-import { useState } from 'react'
-import { titleTextSize, subtitleTextSize, nomralTextSize } from "../utils/ResponsiveStyles";
+import { useMemo, useState } from 'react'
+import { subtitleTextSize, nomralTextSize } from "../utils/ResponsiveStyles";
 import useEvents from '../hooks/useEvents'
 import TicketRowInfo from './TicketRowInfo';
 
 const TicketSelection = () => {
   const eventsContext = useEvents();
   const [radioValue, setRadioValue] = useState<string>('0')
-  const { aquiredTickets } = eventsContext;
+  const { currentEvent, aquiredTickets, setTotalPayed, totalPayed } = eventsContext;
   const [currentTypeOfTicket, setCurrentTypeOfTicket] = useState<boolean>(false)
 
   const handleOnChangeRB = (e: any) => {
@@ -19,7 +19,7 @@ const TicketSelection = () => {
 
   const newTicket = (ticketName: string) => {
     let tempTicket;
-    eventsContext.currentEvent?.ticketTypes?.forEach((ticket: any) => {
+    currentEvent?.ticketTypes?.forEach((ticket: any) => {
       if (ticket.name === ticketName) {
         tempTicket = { ...ticket, quantity: 1 }
         delete tempTicket.quantityLeft;
@@ -28,7 +28,7 @@ const TicketSelection = () => {
     return tempTicket;
   }
 
-  const findIndexedTicket = (ticketName: string) =>
+  const findIndexedTicket = (ticketName: string): number =>
     eventsContext.aquiredTickets?.findIndex((ticket: any) => ticket.name === ticketName)
 
   const handleOnChange = (ticketName: string, value: number) => {
@@ -39,6 +39,12 @@ const TicketSelection = () => {
     eventsContext.setAquiredTickets(aquiredTicketsCopy);
   }
 
+  useMemo(() => {
+    const totalAmount = aquiredTickets?.reduce((partSum: number, ticket: any) =>
+      partSum + (ticket.quantity * ticket.price), 0);
+
+    setTotalPayed(totalAmount);
+  }, [aquiredTickets])
 
   const handleAdd = (ticketName: string) => {
     const tktIndex = findIndexedTicket(ticketName);
@@ -51,7 +57,7 @@ const TicketSelection = () => {
     }
     eventsContext.setAquiredTickets(aquiredTicketsCopy);
   }
-  
+
   return (
     <>
       <Box minWidth='50%' gap='2' mt={"50px"}>
@@ -63,7 +69,7 @@ const TicketSelection = () => {
             <Text fontSize={subtitleTextSize} fontWeight={'bold'}>
               Available options:</Text>
             <Stack direction={'row'} justifyContent={'flex-start'} gap={6} spacing={[4, 4, 4, 6]} >
-              {eventsContext.currentEvent?.ticketTypes?.map((ticket: any, i: number) => {
+              {currentEvent?.ticketTypes?.map((ticket: any, i: number) => {
                 return <>
                   <Radio value={`${ticket?.name}`}>
                     <Text fontSize={nomralTextSize} fontWeight={'bold'}>
@@ -80,24 +86,24 @@ const TicketSelection = () => {
         </RadioGroup>
         {/* Table */}
         <TableContainer marginTop={4}>
-          <Table variant='simple' fontSize={nomralTextSize}>
+          <Table variant='simple' size={['sm', 'sm', 'md', 'lg']}  >
             <Thead>
               <Tr>
-                <Th>Ticket name</Th>
+                <Th>Ticket</Th>
                 <Th>Price</Th>
-                <Th>quantity</Th>
+                <Th>Quantity</Th>
                 <Th>Total</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {aquiredTickets?.map((ticket: any) => <TicketRowInfo ticket={ticket} handleOnChange={handleOnChange} /> )}
+              {aquiredTickets?.map((ticket: any) => <TicketRowInfo ticket={ticket} handleOnChange={handleOnChange} ticketLimit={currentEvent?.ticketTypes[findIndexedTicket(ticket.name)].quantityLeft} />)}
             </Tbody>
             <Tfoot>
               <Tr>
                 <Th></Th>
                 <Th></Th>
                 <Th></Th>
-                <Th isNumeric>0</Th>
+                <Th isNumeric>{totalPayed}</Th>
               </Tr>
             </Tfoot>
           </Table>

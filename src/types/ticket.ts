@@ -3,6 +3,7 @@ export type TTicket = {
   order: string,
   type: string,
   validated?: boolean,
+  price?: number
 };
 
 export type TTicketType = {

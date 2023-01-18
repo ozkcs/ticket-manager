@@ -44,12 +44,11 @@ const ClientTicketSummary = () => {
   const bgChipColor = useColorModeValue('gray.50', 'whiteAlpha.200');
   return (
     <>
-      {isValidPin
+      {!isValidPin
         ? <PinValidationModal onPinAccepted={onPinAccepted} />
         : <Stack justifyContent={'center'} alignItems={'center'} alignContent={'center'} mb={10} mt={10}>
           {isLoading
             ? <Spinner />
-
             : <>
               <Stack w={['100%', '100%', '75%', '75%']} alignItems={'center'} justifyContent={'space-between'} direction={['column', 'column', 'row', 'row']} mt={10} mb={10}>
                 <Stack>
