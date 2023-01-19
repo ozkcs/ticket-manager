@@ -7,6 +7,7 @@ import {
 	getDocs,
 	query,
 	where,
+	serverTimestamp,
 } from "@firebase/firestore";
 import { db } from "./firebaseService";
 import { TTicket } from "../types/ticket";
@@ -17,7 +18,8 @@ const ordersCollection = collection(db, "user_orders");
 
 export const buyTickets = async (
 	useInfo: any,
-	eventInfo: any
+	eventInfo: any,
+	totalPayed: number
 ): Promise<string | undefined> => {
 	try {
 		const promisesBuffer: any = [];
@@ -25,6 +27,8 @@ export const buyTickets = async (
 		const userOrder = await addDoc(ordersCollection, {
 			...useInfo,
 			eventId: eventInfo.id,
+			totalPayed: totalPayed,
+			purchaseDate: serverTimestamp(),
 		});
 
 		eventInfo.aquiredTickets.forEach((ticket: any) => {
@@ -59,6 +63,13 @@ export const getOrders = async (): Promise<Array<TOrder> | undefined> => {
 		...doc.data(),
 		id: doc.id,
 	}));
+	buildedOrders.sort((orderA: TOrder, orderB: TOrder) =>
+		orderA.purchaseDate > orderB.purchaseDate
+			? -1
+			: orderA.purchaseDate < orderB.purchaseDate
+			? 1
+			: 0
+	);
 	return buildedOrders;
 };
 
@@ -114,6 +125,8 @@ export const getOrder = async (
 			first_name: order.data()?.first_name,
 			last_name: order.data()?.last_name,
 			phone: order.data()?.phone,
+			totalPayed: order.data()?.totalPayed,
+			purchaseDate: order.data()?.purchaseDate,
 		};
 	}
 };

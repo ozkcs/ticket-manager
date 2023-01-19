@@ -1,4 +1,4 @@
-import { ChakraProvider, theme } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { EventsProvider } from './context/EventsContext';
 // Components
@@ -11,9 +11,10 @@ import OrderHistory from './views/OrderHistory';
 
 import ClientLayout from './layout/ClientLayout';
 import ClientTicketSummary from './views/ClientTicketSummary';
+import { customTheme } from './utils/customTheme';
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
+  <ChakraProvider theme={customTheme}>
     <BrowserRouter>
       <EventsProvider>
         <Routes>

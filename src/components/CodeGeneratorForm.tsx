@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const CodeGeneratorForm = () => {
   const navigate = useNavigate();
   const eventsContext = useEvents();
-  const { currentEvent } = eventsContext;
+  const { currentEvent, totalPayed } = eventsContext;
 
   const formik: any = useFormik({
     initialValues: {
@@ -25,7 +25,7 @@ const CodeGeneratorForm = () => {
       phone: Yup.string().required("This field is required"),
     }),
     onSubmit: async (values: any, actions: any) => {
-      const order = await buyTickets(values, currentEvent);
+      const order = await buyTickets(values, currentEvent, totalPayed);
       if (order) {
         navigate(`/admin/ticket-summary/${order}`);
       } else {

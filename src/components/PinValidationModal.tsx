@@ -2,6 +2,7 @@
 import { Box, Button, HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, PinInput, PinInputField, Text, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "@firebase/auth";
+import useEvents from '../hooks/useEvents';
 
 interface IPinValidationModal {
   onPinAccepted: (value: boolean) => void
@@ -9,6 +10,8 @@ interface IPinValidationModal {
 
 function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
   const auth = getAuth();
+  const eventsContext = useEvents();
+  const { currentOrder } = eventsContext;
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [pinCode, setPinCode] = useState<string>();
   const [confirmationResult, setConfirmationResult] = useState<any>();
@@ -19,7 +22,7 @@ function PinValidationModal({ onPinAccepted }: IPinValidationModal) {
   }, []);
 
   const handleSendCode = async () => {
-    const phone = '+50684685382'
+    const phone = currentOrder?.phone
     const recapcha = new RecaptchaVerifier(
       'auth-container',
       { 'size': 'invisible' },

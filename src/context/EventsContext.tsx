@@ -16,6 +16,7 @@ const EventsProvider = ({ children }: props) => {
   const [currentOrder, setCurrentOrder] = useState<TOrder | undefined>()
   const [pruchasedTickets, setPruchasedTickets] = useState<Array<TTicket> | undefined>();
   const { aquiredTickets } = currentEvent || [null];
+  const [totalPayed, setTotalPayed] = useState<number>(0);
 
   const setAquiredTickets = (temp: any) => {
     setCurrentEvent({ ...currentEvent, aquiredTickets: temp })
@@ -33,28 +34,16 @@ const EventsProvider = ({ children }: props) => {
     await postEvents();
   }
 
-  useMemo(() => {
-    let templ = events.map((ev: any) => {
-      if (ev.name === currentEvent.name) {
-        return currentEvent
-      }
-      else {
-        return ev
-      }
-    });
-    setEvents(templ);
-  }, [currentEvent?.aquiredTickets])
-
   return (
     <EventsContext.Provider
       value={{
         currentEvent, setCurrentEvent,
         events, setEvents,
         isLoading, setIsLoading,
-        // orderID, setOrderID,
         currentOrder, setCurrentOrder,
         pruchasedTickets, setPruchasedTickets,
         aquiredTickets, setAquiredTickets,
+        totalPayed, setTotalPayed,
         fetchEvents, postNewEvents
       }}>
       {children}
