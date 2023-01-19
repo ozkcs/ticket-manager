@@ -2,7 +2,7 @@ import {
   Box, Button, Heading, Radio, RadioGroup, Spacer, Stack, Text,
   Table, Thead, Tbody, Tfoot, Tr, Th, TableContainer,
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { subtitleTextSize, nomralTextSize } from "../utils/ResponsiveStyles";
 import useEvents from '../hooks/useEvents'
 import TicketRowInfo from './TicketRowInfo';
@@ -39,7 +39,7 @@ const TicketSelection = () => {
     eventsContext.setAquiredTickets(aquiredTicketsCopy);
   }
 
-  useMemo(() => {
+  useEffect(() => {
     const totalAmount = aquiredTickets?.reduce((partSum: number, ticket: any) =>
       partSum + (ticket.quantity * ticket.price), 0);
 
