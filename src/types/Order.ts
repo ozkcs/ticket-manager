@@ -6,5 +6,5 @@ export type TOrder = {
 	last_name: string;
 	phone: string;
 	totalPayed: string;
-	purchaseDate: string;
+	purchaseDate: any;
 };

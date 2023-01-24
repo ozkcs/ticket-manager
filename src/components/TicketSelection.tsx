@@ -15,6 +15,9 @@ const TicketSelection = () => {
 
   const handleOnChangeRB = (e: any) => {
     setRadioValue(e.valueOf())
+    let aquiredTicketsCopy = eventsContext.aquiredTickets?.slice() || [];
+    const tktIndex = findIndexedTicket(e.valueOf());
+    aquiredTicketsCopy[tktIndex]?.quantity > 9 ? setCurrentTypeOfTicket(true) : setCurrentTypeOfTicket(false)
   }
 
   const newTicket = (ticketName: string) => {
