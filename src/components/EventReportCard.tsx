@@ -1,4 +1,4 @@
-import { HStack, Heading, Img, Stat, StatLabel, StatNumber, VStack, useColorModeValue } from "@chakra-ui/react";
+import { Divider, HStack, Heading, Img, Stat, StatLabel, StatNumber, VStack, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import LabeledText from "./LabeledText";
 import { TTicket, TTicketType } from "../types/ticket";
@@ -92,17 +92,21 @@ const EventReportCard = ({ event, eventOrders, tickets }: IEventReportCard) => {
             onError={(err) => console.log(err)} />
           <VStack alignItems={'flex-start'} gap={2} w={'100%'}>
             {event?.ticketTypes?.map((type: TTicketType) =>
-              <LabeledText key={type.name} justifyContent={'space-between'} label={type.name} text={(eventSales ? getLength(eventSales[type.name]) : '') + " x " + type.price} />
+              <LabeledText key={type.name} justifyContent={'space-between'} label={type.name} text={(eventSales ? getLength(eventSales[type.name]) : '') + " x ₡" + type.price} />
             )}
           </VStack>
-          <VStack>
-            <Stat>
-              <StatLabel>Total Collected</StatLabel>
-              <StatNumber>₡{eventProfit}</StatNumber>
-              {/* <StatHelpText>TODO: dateCreated - actualTimestamp</StatHelpText> */}
-            </Stat>
-          </VStack>
-        </HStack> </HStack>
+        </HStack>
+      </HStack>
+      <Divider/>
+      <HStack w={'100%'}>
+        <Stat >
+          <HStack w={'100%'} justifyContent={'space-between'}>
+            <StatLabel fontSize={'xl'}>Total Collected:</StatLabel>
+            <StatNumber>₡{eventProfit}</StatNumber>
+            {/* <StatHelpText>TODO: dateCreated - actualTimestamp</StatHelpText> */}
+          </HStack>
+        </Stat>
+      </HStack>
     </VStack>
   )
 
