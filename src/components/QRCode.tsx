@@ -23,7 +23,7 @@ const QRCode = ({ orderID, ticket }: IQRCodeProps) => {
       {isLoading ?
         <Spinner /> :
         <>
-          <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>{ticket.type}</Text>
+          <Text size={nomralTextSize} color={'#1a202c'} fontWeight={'bold'}>{ticket.name}</Text>
           <QRCodeLogo
             value={`${orderID},${ticket.id}`}
             ecLevel='H'

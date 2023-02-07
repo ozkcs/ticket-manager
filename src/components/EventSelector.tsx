@@ -13,12 +13,13 @@ const EventSelector = () => {
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
         <Flex>
           <Center gap={2}>
-          <IconCalendarEvent />{eventsContext.currentEvent?.name || 'Select Event'}
+            <IconCalendarEvent />{eventsContext.currentEvent?.name || 'Select Event'}
           </Center>
         </Flex>
       </MenuButton>
       <MenuList>
-        {eventsContext.events?.map((event: any, i: any) => (<MenuItem onClick={() => { handleOnChange(i) }}>{event?.name}</MenuItem>))}
+        {eventsContext.events?.map((event: any, i: any) =>
+          <MenuItem key={event.id} onClick={() => { handleOnChange(i) }}>{event?.name}</MenuItem>)}
       </MenuList>
     </Menu>
   )

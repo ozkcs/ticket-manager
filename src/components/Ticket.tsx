@@ -46,7 +46,7 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
   ]
 
   return (
-    <VStack  >
+    <VStack >
       <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4} borderRadius={10}>
 
         <VStack width={['400px', '500px', '500px']} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
@@ -78,8 +78,8 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
             <LabeledText label='Email:' text={order.email} />
           </HStack>
           <HStack justifyContent={'space-evenly'} w={'100%'} >
-            <LabeledText label='Nombre:' text={order.first_name + ' ' + order.last_name} />
-            <LabeledText label='Tel:' text={order.phone} />
+            <LabeledText justifyContent='center' label='Nombre:' text={order.first_name + ' ' + order.last_name} />
+            <LabeledText justifyContent='center' label='Tel:' text={order.phone} />
           </HStack>
           <HStack spacing={1} display={'block'}>
             <Text as='sub' fontStyle={'italic'} fontSize='sm' fontWeight={'bold'} variant={'primary'}>

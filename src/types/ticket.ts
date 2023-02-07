@@ -4,6 +4,7 @@ export type TTicket = {
   type: string,
   validated?: boolean,
   price?: number
+  name?:string
 };
 
 export type TTicketType = {

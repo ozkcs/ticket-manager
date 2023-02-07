@@ -9,7 +9,7 @@ const AdminLayout = () => {
 
   const [currentView, setCurrentView] = useState<string>('');
   const handleNavigate = (view: string) => {
-    const isRoot = view === ('reporting' || 'root')
+    const isRoot = view === ('root')
     setCurrentView(isRoot ? '' : view);
     navigate(isRoot ? '/admin' : view);
   }

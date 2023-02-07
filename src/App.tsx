@@ -12,6 +12,7 @@ import OrderHistory from './views/OrderHistory';
 import ClientLayout from './layout/ClientLayout';
 import ClientTicketSummary from './views/ClientTicketSummary';
 import { customTheme } from './utils/customTheme';
+import Reporting from './views/Reporting';
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -22,8 +23,9 @@ export const App = () => (
             <Route path="" element={<EventGallery />} />
             <Route path="generate-code" element={<GenerateCode />} />
             <Route path="validate-code" element={<ValidateCode />} />
-            <Route path="ticket-summary/:orderID" element={<TicketSummary />} />
+            <Route path="reporting" element={<Reporting />} />
             <Route path="order-history" element={<OrderHistory />} />
+            <Route path="ticket-summary/:orderID" element={<TicketSummary />} />
           </Route>
           <Route path="/order" element={<ClientLayout />} >
             <Route path=":orderID" element={<ClientTicketSummary />} />

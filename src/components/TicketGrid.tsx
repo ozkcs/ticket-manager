@@ -3,6 +3,7 @@ import { TEvents, TTicket } from "../types/ticket";
 import Ticket from "./Ticket";
 import { TOrder } from "../types/Order";
 import useEvents from "../hooks/useEvents";
+import { useEffect } from "react";
 
 interface ITicketGrid {
   order: TOrder,
@@ -12,7 +13,11 @@ interface ITicketGrid {
 const TicketGrid = ({ order, tickets }: ITicketGrid) => {
   const eventsContext = useEvents();
   const { events, setCurrentEvent, currentEvent } = eventsContext;
-  setCurrentEvent( events.find((event: TEvents) => event.id === order?.eventId));
+
+  useEffect(() => {
+    if (!currentEvent)
+      setCurrentEvent(events.find((event: TEvents) => event.id === order?.eventId));
+  }, [])
 
   return (
     <Stack w={'100%'} alignItems={'center'}>
@@ -29,7 +34,7 @@ const TicketGrid = ({ order, tickets }: ITicketGrid) => {
         }}
         gap={8} alignItems={'center'}>
         {currentEvent && tickets?.map((ticket: TTicket) =>
-          <Ticket order={order} ticket={ticket} event={currentEvent} isDownloadable />
+          <Ticket key={ticket.id} order={order} ticket={ticket} event={currentEvent} isDownloadable />
         )}
       </SimpleGrid>
     </Stack >)

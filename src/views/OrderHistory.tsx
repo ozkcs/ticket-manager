@@ -51,6 +51,7 @@ const OrderHistory = () => {
         {orders && orders?.map((order: TOrder) =>
 
           <VStack as={'button'}
+            key={order.id}
             onClick={() => handleClick(order)}
             width={'500px'}
             gap={4}

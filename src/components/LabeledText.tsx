@@ -7,7 +7,7 @@ interface ILabaledText {
 }
 const LabeledText = ({ label, text, justifyContent }: ILabaledText) => {
   return (
-    <HStack spacing={2} alignItems={'baseline'} justifyContent={justifyContent || 'center'} >
+    <HStack spacing={2} alignItems={'baseline'} justifyContent={justifyContent || 'rigth'} w={'100%'} >
       <Text as='sub' fontSize={nomralTextSize} fontWeight={'bold'} variant={'primary'}>
         {label}</Text>
       <Text as='sub' fontSize={nomralTextSize} variant={'secondary'}>
