@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom';
 import { EventsProvider } from './context/EventsContext';
 // Components
 import AdminLayout from './layout/AdminLayout';
@@ -30,6 +30,10 @@ export const App = () => (
           <Route path="/order" element={<ClientLayout />} >
             <Route path=":orderID" element={<ClientTicketSummary />} />
           </Route>
+          <Route
+            path=""
+            element={<Navigate to="/admin" replace />}
+          />
         </Routes>
       </EventsProvider>
     </BrowserRouter>
