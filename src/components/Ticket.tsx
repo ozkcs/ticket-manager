@@ -67,6 +67,7 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
               <LabeledText label='Lugar:' text={event?.location} />
               <LabeledText label='Fecha:' text={parseStringToDate(event?.date)} />
               <LabeledText label='Hora:' text={parseStringToHour(event?.date)} />
+              <LabeledText label='Precio:' text={'₡'+ticket?.price?.toString() || ''} />
             </VStack>
           </HStack>
           <Divider />
