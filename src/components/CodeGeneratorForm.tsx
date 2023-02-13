@@ -5,11 +5,15 @@ import * as Yup from 'yup';
 import useEvents from '../hooks/useEvents';
 import { buyTickets } from '../services/ticketsService';
 import { useNavigate } from "react-router-dom";
+import ToastMessage from "./ToastMessage";
+
 
 const CodeGeneratorForm = () => {
   const navigate = useNavigate();
+  const spanNewToast = ToastMessage();
   const eventsContext = useEvents();
   const { currentEvent, totalPayed } = eventsContext;
+
 
   const formik: any = useFormik({
     initialValues: {
@@ -21,18 +25,26 @@ const CodeGeneratorForm = () => {
     validationSchema: Yup.object({
       first_name: Yup.string().required("This field is required"),
       last_name: Yup.string().required("This field is required"),
-      email: Yup.string().required("This field is required"),
+      email: Yup.string().email(),
       phone: Yup.string().required("This field is required"),
     }),
     onSubmit: async (values: any, actions: any) => {
       const order = await buyTickets(values, currentEvent, totalPayed);
       if (order) {
+        spanNewToast(
+          'All Right!',
+          'Tickets were succesfully purchased',
+          'success'
+        )
         navigate(`/admin/ticket-summary/${order}`);
       } else {
-        //TODO: handle not submiting
+        spanNewToast(
+          'Oops!! Something is missing',
+          'Please check the information and try again',
+          'warning'
+        )
       }
     }
-
   })
 
   return (
