@@ -11,7 +11,7 @@ const EventSelector = () => {
   return (
     <Menu >
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        <Flex>
+        <Flex overflowX={'hidden'}>
           <Center gap={2}>
             <IconCalendarEvent />{eventsContext.currentEvent?.name || 'Select Event'}
           </Center>

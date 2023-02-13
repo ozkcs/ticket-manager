@@ -33,15 +33,14 @@ const Reporting = () => {
   }, []);
 
   return (
-    <Stack w={'100%'} alignItems={'center'}>
+    <Stack w={'100%'} alignItems={'center'} mb={10}>
       {isLoading
         ? <Spinner size={'xl'} />
         :
         (<SimpleGrid justifyItems='center'
           templateColumns={{
             base: 'repeat(1, 1fr)',
-            md: 'repeat(1, 1fr)',
-            lg: events && events?.length <= 2
+            sm: events && events?.length <= 2
               ? `repeat(${events?.length}, 1fr)`
               : 'repeat(2, 1fr)',
             xl: events && events?.length <= 3

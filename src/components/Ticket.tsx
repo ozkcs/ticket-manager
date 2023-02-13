@@ -49,7 +49,7 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
     <VStack >
       <Box ref={ticketRef} bgColor={'chakra-body-bg'} gap={4} borderRadius={10}>
 
-        <VStack width={['400px', '500px', '500px']} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
+        <VStack width={{ base: '400px', lg: '500px' }} gap={4} bgColor={bgCardColor} borderRadius={10} p={5}>
           <HStack gap={6} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
             <Heading size={'lg'}>{event?.name}</Heading>
             <Button hidden={isDownloading || !isDownloadable} onClick={handleDownload} gap={2} colorScheme={'teal'} ><IconDownload />Descargar</Button>
@@ -67,7 +67,7 @@ const Ticket = ({ order, ticket, event, isDownloadable }: ITicket) => {
               <LabeledText label='Lugar:' text={event?.location} />
               <LabeledText label='Fecha:' text={parseStringToDate(event?.date)} />
               <LabeledText label='Hora:' text={parseStringToHour(event?.date)} />
-              <LabeledText label='Precio:' text={'₡'+ticket?.price?.toString() || ''} />
+              <LabeledText label='Precio:' text={'₡' + ticket?.price?.toString() || ''} />
             </VStack>
           </HStack>
           <Divider />
