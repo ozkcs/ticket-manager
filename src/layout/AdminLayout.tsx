@@ -1,7 +1,7 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const AdminLayout = () => {
@@ -12,6 +12,11 @@ const AdminLayout = () => {
     const isRoot = view === ('root')
     setCurrentView(isRoot ? '' : view);
     navigate(isRoot ? '/admin' : view);
+  }
+
+  // if we don't have a logged user then redirect it to login
+  if (false) {
+    return <Navigate to="/login" replace />
   }
 
   return (
