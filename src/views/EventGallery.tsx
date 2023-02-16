@@ -15,7 +15,9 @@ const EventGallery = () => {
         : <SimpleGrid justifyItems='center'
           templateColumns={{
             base: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
+            sm: eventsContext.events?.length <= 2
+              ? `repeat(${eventsContext.events?.length}, 1fr)`
+              : 'repeat(2, 1fr)',
             xl: eventsContext.events?.length <= 3
               ? `repeat(${eventsContext.events?.length}, 1fr)`
               : 'repeat(3, 1fr)'

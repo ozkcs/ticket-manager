@@ -59,12 +59,9 @@ const QRGenerator = () => {
       <EventBanner />
       <Box minWidth='50%' gap='2' mt={"100px"} mb={"50px"}>
         <Stack justifyContent={'center'} alignItems={'center'} alignContent={'center'} >
-          <HStack justifyContent={'space-between'} width={'100%'}>
-            {/* <Heading mb={'10px'}>Select the tickets you want to send</Heading> */}
-            <HStack justifyContent={'space-around'}>
-              <Button as="a" target="_blank" fontSize={'2xl'} gap={2} variant={'ghost'} colorScheme={'whatsapp'} href={buildWhatsAppLink()}><IconBrandWhatsapp /> Send</Button>
-              <Button variant={'ghost'} colorScheme={'messenger'} fontSize={'2xl'} gap={2}><IconMail /> Send</Button>
-            </HStack>
+          <HStack justifyContent={'flex-end'} width={'100%'}>
+            <Button as="a" target="_blank" fontSize={'2xl'} gap={2} variant={'ghost'} colorScheme={'whatsapp'} href={buildWhatsAppLink()}><IconBrandWhatsapp /> Send Link</Button>
+            {/* <Button variant={'ghost'} colorScheme={'messenger'} fontSize={'2xl'} gap={2}><IconMail /> Send</Button> */}
           </HStack>
           {isLoading
             ? <Spinner />

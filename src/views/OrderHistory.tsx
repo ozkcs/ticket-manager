@@ -35,12 +35,11 @@ const OrderHistory = () => {
   ]
 
   return (
-    <Stack w={'100%'} alignItems={'center'}>
+    <Stack w={'100%'} alignItems={'center'} mb={10}>
       <SimpleGrid justifyItems='center'
         templateColumns={{
           base: 'repeat(1, 1fr)',
-          md: 'repeat(1, 1fr)',
-          lg: orders && orders?.length <= 2
+          sm: orders && orders?.length <= 2
             ? `repeat(${orders?.length}, 1fr)`
             : 'repeat(2, 1fr)',
           xl: orders && orders?.length <= 3
@@ -53,7 +52,7 @@ const OrderHistory = () => {
           <VStack as={'button'}
             key={order.id}
             onClick={() => handleClick(order)}
-            width={'500px'}
+            width={{ base: '400px', lg: '500px' }}
             gap={4}
             bgColor={bgCardColor}
             borderRadius={10}

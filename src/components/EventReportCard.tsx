@@ -74,7 +74,7 @@ const EventReportCard = ({ event, eventOrders, tickets }: IEventReportCard) => {
   return (
     <VStack
       key={event.id}
-      width={'500px'}
+      width={{ base: '400px', lg: '500px' }}
       gap={4}
       bgColor={bgCardColor}
       borderRadius={10}
@@ -97,7 +97,7 @@ const EventReportCard = ({ event, eventOrders, tickets }: IEventReportCard) => {
           </VStack>
         </HStack>
       </HStack>
-      <Divider/>
+      <Divider />
       <HStack w={'100%'}>
         <Stat >
           <HStack w={'100%'} justifyContent={'space-between'}>

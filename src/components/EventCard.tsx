@@ -23,7 +23,7 @@ const EventCard = ({ event, count }: props) => {
   ]
 
   return (
-    <Box as="button" maxWidth='500px' minWidth='450px' borderRadius='10'
+    <Box as="button" maxWidth={{ base: '400px', md: '500px' }} minWidth='350px' borderRadius='10'
       bgColor={bgCardColor}
       p='4' onClick={handleOnClick}
       _hover={{ bg: hoverColor, boxShadow: "2xl" }}>

@@ -1,6 +1,14 @@
 import { extendTheme } from "@chakra-ui/react"
 import type { StyleFunctionProps } from '@chakra-ui/styled-system'
 
+const breakpoints = {
+  sm: '900px',
+  md: '1000px',
+  lg: '1366px',
+  xl: '1920px',
+  '2xl': '2560px',
+}
+
 export const customTheme = extendTheme({
   components: {
     Text: {
@@ -14,4 +22,5 @@ export const customTheme = extendTheme({
       }
     }
   },
+  breakpoints
 })

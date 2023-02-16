@@ -5,6 +5,7 @@ import {
   ImageProps,
   forwardRef,
   usePrefersReducedMotion,
+  useColorModeValue,
 } from "@chakra-ui/react"
 import logo from "./beach-badge.png"
 
@@ -19,6 +20,8 @@ export const Logo = forwardRef<ImageProps, "img">((props, ref) => {
   const animation = prefersReducedMotion
     ? undefined
     : `${spin} infinite 20s linear`
+    
+  const invertValue = useColorModeValue(1,0);
 
-  return <chakra.img animation={animation} src={logo} ref={ref} {...props} />
+  return <chakra.img animation={animation} src={logo} ref={ref} {...props} __css={{'filter':`invert(${invertValue});`}}/>
 })

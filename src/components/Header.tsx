@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, ButtonGroup, Heading, Button } from '@chakra-ui/react';
+import { Box, Flex, Spacer, ButtonGroup, Heading, Button, Hide } from '@chakra-ui/react';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { useNavigate } from "react-router-dom";
 import { Logo } from '../Logo';
@@ -15,7 +15,7 @@ const Header = ({ handleNavigate }: IHeader) => {
   const eventsContext = useEvents();
 
   return (
-    <Flex w={'100vw'} maxW={'100%'} alignItems='center' gap='2' p="2">
+    <Flex w={'100vw'} maxW={'100%'} alignItems='center' gap='2' p="2" mt={2}>
       <Box as='button' p='2' display='flex' alignItems="center"
         onClick={() => { handleNavigate('/admin'); eventsContext.setCurrentEvent(null) }}>
         <Logo h="6vmin" mr="5" />
@@ -24,7 +24,12 @@ const Header = ({ handleNavigate }: IHeader) => {
       <Spacer />
       <ButtonGroup gap='2'>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <Button colorScheme='teal' gap={2}>Log Out<IconLogout /></Button>
+        <Button colorScheme='teal' gap={2}>
+          <Hide below='lg'>
+            Log Out
+          </Hide>
+          <IconLogout />
+        </Button>
       </ButtonGroup>
     </Flex>
   )

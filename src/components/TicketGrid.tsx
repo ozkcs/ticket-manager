@@ -20,12 +20,11 @@ const TicketGrid = ({ order, tickets }: ITicketGrid) => {
   }, [])
 
   return (
-    <Stack w={'100%'} alignItems={'center'}>
+    <Stack w={'100%'} alignItems={'center'} mb={10}>
       <SimpleGrid justifyItems='center'
         templateColumns={{
           base: 'repeat(1, 1fr)',
-          md: 'repeat(1, 1fr)',
-          lg: tickets?.length <= 2
+          sm: tickets?.length <= 2
             ? `repeat(${tickets?.length}, 1fr)`
             : 'repeat(2, 1fr)',
           xl: tickets?.length <= 3
