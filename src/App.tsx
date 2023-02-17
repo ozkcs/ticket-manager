@@ -14,32 +14,34 @@ import ClientTicketSummary from './views/ClientTicketSummary';
 import { customTheme } from './utils/customTheme';
 import Reporting from './views/Reporting';
 import NotFoundComponent from './views/NotFoundPage';
+import Login from './views/Login';
 
 export const App = () => {
-
   return (
     <ChakraProvider theme={customTheme}>
       <BrowserRouter>
         <EventsProvider>
           <Routes>
+
+            <Route path='/' element={<Navigate to='/admin' replace />} />
+
             <Route path='/admin' element={<AdminLayout />}>
               <Route path='' element={<EventGallery />} />
               <Route path='generate-code' element={<GenerateCode />} />
               <Route path='validate-code' element={<ValidateCode />} />
               <Route path='reporting' element={<Reporting />} />
               <Route path='order-history' element={<OrderHistory />} />
-              <Route
-                path='ticket-summary/:orderID'
-                element={<TicketSummary />}
-              />
-              <Route path='*' element={<NotFoundComponent />}/>
+              <Route path='ticket-summary/:orderID' element={<TicketSummary />} />
             </Route>
+
             <Route path='/order' element={<ClientLayout />}>
+              <Route path='' element={<NotFoundComponent />} />
               <Route path=':orderID' element={<ClientTicketSummary />} />
             </Route>
-            <Route path='/login' element={<ClientLayout />} />
-            <Route path='/' element={<Navigate to='/admin' replace />} />
-            <Route path='*' element={<NotFoundComponent path='/login' />} />
+
+            <Route path='/login' element={<Login />} />
+
+            <Route path='*' element={<NotFoundComponent />} />
           </Routes>
         </EventsProvider>
       </BrowserRouter>

@@ -2,16 +2,7 @@ import { Button, HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import Typewriter from "typewriter-effect";
 import { useNavigate } from 'react-router-dom';
 
-interface IPropsNotFoundPage {
-  path?: string
-}
-
-enum ERedirectLabel {
-  DASHBOARD='Dashboard',
-  LOGIN='Login'
-}
-
-const NotFoundComponent = ({ path }: IPropsNotFoundPage) => {
+const NotFoundComponent = () => {
   const navigate = useNavigate()
 
   return (
@@ -37,7 +28,7 @@ const NotFoundComponent = ({ path }: IPropsNotFoundPage) => {
         </Text>
       </VStack>
       <HStack mt='2rem' h='120px'>
-        <Button colorScheme='teal' gap={2} onClick={() => navigate(path || '/admin')}>Go to {path ? ERedirectLabel.LOGIN : ERedirectLabel.DASHBOARD}</Button>
+        <Button colorScheme='teal' gap={2} onClick={() => navigate('/')}>Go to Home</Button>
       </HStack>
     </VStack>
   );
