@@ -63,6 +63,7 @@ const CodeGeneratorForm = () => {
               {...formik.getFieldProps("first_name")}
               isInvalid={formik.errors.first_name && formik.touched.first_name}
               errors={formik.errors.first_name}
+              onBlur={formik.onnBlur()}
             />
             <FormInput
               name="last_name"
@@ -72,6 +73,7 @@ const CodeGeneratorForm = () => {
               {...formik.getFieldProps("last_name")}
               isInvalid={formik.errors.last_name && formik.touched.last_name}
               errors={formik.errors.last_name}
+              onBlur={formik.onnBlur()}
             />
           </Stack>
           <Stack spacing={4} direction={['column', 'column', 'row', 'row']}>
@@ -83,6 +85,7 @@ const CodeGeneratorForm = () => {
               {...formik.getFieldProps("email")}
               isInvalid={formik.errors.email && formik.touched.email}
               errors={formik.errors.email}
+              onBlur={formik.onnBlur()}
             />
             <FormInput
               name="phone"
@@ -92,6 +95,7 @@ const CodeGeneratorForm = () => {
               {...formik.getFieldProps("phone")}
               isInvalid={formik.errors.phone && formik.touched.phone}
               errors={formik.errors.phone}
+              onBlur={formik.onnBlur()}
             />
           </Stack>
           <Flex minWidth='100%' alignItems='center' justifyContent='center' textAlign='center' >
