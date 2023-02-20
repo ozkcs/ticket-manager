@@ -19,7 +19,7 @@ const FormInput = ({ formLabel, type, helperText, size, isRequired, name, value,
     <>
       <FormControl isRequired={isRequired} isInvalid={isInvalid}>
         <FormLabel>{formLabel}</FormLabel>
-        <Input name={name} type={type && 'text'} value={value} onChange={onChange} />
+        <Input name={name} type={type || 'text'} value={value} onChange={onChange}/>
         {!errors ? <FormHelperText>{helperText}</FormHelperText> :
           <FormErrorMessage>{errors}</FormErrorMessage>}
       </FormControl>

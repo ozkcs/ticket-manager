@@ -1,21 +1,23 @@
+import { useState } from "react";
 import { Box, Center, Flex } from "@chakra-ui/react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useAuth } from '../context/AuthContext';
+import { useCookie } from '../hooks/useCookie';
 
 const AdminLayout = () => {
-  const navigate = useNavigate();
-
   const [currentView, setCurrentView] = useState<string>('');
+  const navigate = useNavigate();
+  const { getItem } = useCookie()
+
   const handleNavigate = (view: string) => {
     const isRoot = view === ('root')
     setCurrentView(isRoot ? '' : view);
     navigate(isRoot ? '/admin' : view);
   }
 
-  // if we don't have a logged user then redirect it to login
-  if (false) {
+  if (!getItem('token_id')) {
     return <Navigate to="/login" replace />
   }
 
