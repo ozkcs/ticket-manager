@@ -12,14 +12,15 @@ interface props {
   onChange: any;
   isInvalid?: boolean;
   errors?: any;
+  onBlur?: () => void;
 }
 
-const FormInput = ({ formLabel, type, helperText, size, isRequired, name, value, onChange, isInvalid, errors }: props) => {
+const FormInput = ({ formLabel, type, helperText, size, isRequired, name, value, onChange, isInvalid, errors, onBlur }: props) => {
   return (
     <>
       <FormControl isRequired={isRequired} isInvalid={isInvalid}>
         <FormLabel>{formLabel}</FormLabel>
-        <Input name={name} type={type || 'text'} value={value} onChange={onChange}/>
+        <Input name={name} type={type || 'text'} value={value} onChange={onChange} onBlur={onBlur} />
         {!errors ? <FormHelperText>{helperText}</FormHelperText> :
           <FormErrorMessage>{errors}</FormErrorMessage>}
       </FormControl>
