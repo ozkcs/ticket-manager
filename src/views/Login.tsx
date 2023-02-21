@@ -7,12 +7,20 @@ import login_animation from '../assets/login/60a6dc77d6c4a91fc4782f68_Group 14.s
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { decodeToken } from '../utils/decodeToken';
+import ToastMessage from '../components/ToastMessage';
 
 const Login = () => {
-
   const auth = getAuth();
   const { login } = useAuth()
   const navigate = useNavigate()
+  const token = decodeToken()
+  const spanNewToast = ToastMessage();
+
+  useEffect(() => {
+    if (token) navigate('/admin')
+  }, [])
 
   const formik: FormikValues = useFormik({
     initialValues: {
@@ -26,12 +34,12 @@ const Login = () => {
     onSubmit: async (values: FormikValues) => {
       try {
         const { user }: any = await signInWithEmailAndPassword(auth, values.email, values.password)
-        login(user.email, user.accessToken, user.stsTokenManager.expirationTime)
+        login(user.email, user.stsTokenManager.accessToken, user.stsTokenManager.expirationTime)
         navigate('/admin')
       } catch (error: any) {
         // TODO: custom logger  
         console.log(error.code);
-        console.log(error.message);
+        spanNewToast('something has happened', error.message, 'error')
       }
     }
   })

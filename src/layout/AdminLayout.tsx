@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Center, Flex } from "@chakra-ui/react";
 import Header from "../components/Header";
 import Navigation from "../components/Navigation";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from '../context/AuthContext';
 import { useCookie } from '../hooks/useCookie';
+import { decodeToken } from '../utils/decodeToken';
 
 const AdminLayout = () => {
   const [currentView, setCurrentView] = useState<string>('');
   const navigate = useNavigate();
-  const { getItem } = useCookie()
+  const { removeItem } = useCookie()
+  const token = decodeToken()
 
   const handleNavigate = (view: string) => {
     const isRoot = view === ('root')
@@ -17,7 +18,14 @@ const AdminLayout = () => {
     navigate(isRoot ? '/admin' : view);
   }
 
-  if (!getItem('token_id')) {
+  useEffect(() => {
+    if (token?.exp * 1000 < Date.now()) {
+      navigate('/login')
+      removeItem('token_id')
+    }
+  }, [])
+
+  if (!token) {
     return <Navigate to="/login" replace />
   }
 
